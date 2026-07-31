@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dashboard Vendor untuk JAKALELANA Tour & Travel">
+    <title>Dashboard Mitra - JAKALELANA</title>
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+    <link rel="manifest" href="assets/icons/site.webmanifest">
+    <link rel="shortcut icon" href="assets/icons/favicon.ico">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="dashboard-page vendor-theme">
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel">
+            <div class="sidebar-header">
+                <img src="assets/icons/android-chrome-512x512.png" alt="JAKALELANA Logo" style="width: 32px; height: auto;">
+                <h2>PORTAL MITRA</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-target="services"><i class="ph ph-list-dashes"></i> Daftar Layanan Saya</a>
+                <a href="#" class="nav-item" data-target="profile"><i class="ph ph-user-circle"></i> Profil Instansi</a>
+                <a href="#" class="nav-item" id="logoutBtn"><i class="ph ph-sign-out"></i> Keluar</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="avatar">
+                        <img id="sidebarVendorLogo" src="" alt="" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: none;">
+                        <i class="ph ph-storefront" id="sidebarVendorIcon"></i>
+                    </div>
+                    <div>
+                        <span class="user-name" id="userNameDisplay">Nama Vendor</span>
+                        <span class="user-role" id="userCategoryDisplay">Kategori</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar glass-panel">
+                <button type="button" class="mobile-menu-btn" id="mobileMenuBtn"><i class="ph ph-list"></i></button>
+                <h1 id="pageTitle">Daftar Layanan Saya</h1>
+                <div class="actions">
+                    <button class="btn-primary btn-sm" id="addNewListingBtn"><i class="ph ph-plus"></i> Tambah Layanan Baru</button>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Services View -->
+                <div id="view-services" class="view-section active fade-in">
+                    <!-- Profile Summary Card -->
+                    <div class="card glass-panel" style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem;">
+                        <img id="summaryLogo" src="https://ui-avatars.com/api/?name=V&background=random" alt="Logo" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; background: rgba(255,255,255,0.1);">
+                        <div style="flex: 1;">
+                            <h2 style="margin: 0; font-size: 1.25rem; color: var(--text-primary);" id="summaryName">Nama Instansi</h2>
+                            <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: var(--text-muted);">
+                                <i class="ph ph-user"></i> PIC: <span id="summaryPIC">-</span> &nbsp;|&nbsp; 
+                                <i class="ph ph-phone"></i> Telp: <span id="summaryPhone">-</span> &nbsp;|&nbsp; 
+                                <i class="ph ph-identification-card"></i> Username: <span id="summaryUsername">-</span>
+                            </p>
+                            <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: var(--text-muted);">
+                                <i class="ph ph-map-pin"></i> Alamat: <span id="summaryAddress">-</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card glass-panel">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table" id="vendorTable">
+                                    <thead>
+                                        <!-- Injected dynamically based on category -->
+                                    </thead>
+                                    <tbody>
+                                        <!-- Injected dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="vendorLoading" class="loading-state">
+                                <i class="ph ph-spinner ph-spin"></i> Memuat data layanan Anda...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile View -->
+                <div id="view-profile" class="view-section fade-in" style="display:none;">
+                    <div class="card glass-panel">
+                        <div class="card-header">
+                            <h3>Informasi Profil & Logo Instansi</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="vendorProfileForm" class="grid-form">
+                                <div class="form-group full-width" style="text-align: center; margin-bottom: 2rem;">
+                                    <div class="profile-logo-preview">
+                                        <img id="profileLogoImg" src="" alt="Logo Instansi" style="width: 120px; height: 120px; border-radius: 12px; object-fit: cover; background: rgba(255,255,255,0.05); margin-bottom: 1rem; border: 2px dashed rgba(255,255,255,0.2);">
+                                    </div>
+                                    <div>
+                                        <label for="profileLogoInput" class="btn-outline btn-sm" style="cursor: pointer;"><i class="ph ph-upload-simple"></i> Unggah Logo Baru</label>
+                                        <input type="file" id="profileLogoInput" accept="image/png, image/jpeg" style="display: none;">
+                                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Format JPG/PNG. Maksimal ukuran file 1MB disarankan.</p>
+                                    </div>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Nama Instansi / Perusahaan</label>
+                                    <input type="text" id="profName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nama PIC / Penanggung Jawab</label>
+                                    <input type="text" id="profPIC" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nomor Telepon / WhatsApp</label>
+                                    <input type="text" id="profPhone" required>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Alamat Lengkap</label>
+                                    <input type="text" id="profAddress" required>
+                                </div>
+                                <div class="form-group full-width">
+                                    <button type="submit" class="btn-primary" id="saveProfileBtn"><i class="ph ph-floppy-disk"></i> Simpan Perubahan Profil</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Item Modal -->
+    <div class="modal hidden" id="addItemModal">
+        <div class="modal-content glass-panel fade-in">
+            <div class="modal-header">
+                <h2 id="modalTitle">Formulir Layanan</h2>
+                <button class="btn-icon" id="closeModalBtn"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="vendorAddItemForm" class="grid-form">
+                    <!-- Form fields injected dynamically based on category -->
+                </form>
+            </div>
+            <div class="modal-footer" style="justify-content: space-between;">
+                <button class="btn-outline" id="deleteItemModalBtn" style="color:var(--danger); border-color:var(--danger); display:none;"><i class="ph ph-trash"></i> Hapus</button>
+                <div style="display:flex; gap:1rem;">
+                    <button class="btn-outline" id="cancelModalBtn">Batal</button>
+                    <button class="btn-primary" id="saveItemBtn">Simpan ke Database</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Logic -->
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

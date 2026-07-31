@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dashboard Admin JAKALELANA Tour & Travel">
+    <title>Dashboard Admin - JAKALELANA</title>
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+    <link rel="manifest" href="assets/icons/site.webmanifest">
+    <link rel="shortcut icon" href="assets/icons/favicon.ico">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="dashboard-page">
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel">
+            <div class="sidebar-header">
+                <img src="assets/icons/android-chrome-512x512.png" alt="JAKALELANA Logo" style="width: 32px; height: auto;">
+                <h2>JAKALELANA</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-target="packages"><i class="ph ph-calculator"></i> Kalkulator Paket</a>
+                <a href="#" class="nav-item" data-target="package-list"><i class="ph ph-list-dashes"></i> Daftar Paket</a>
+                <a href="#" class="nav-item" data-target="vendors"><i class="ph ph-users-three"></i> Kemitraan</a>
+                <a href="#" class="nav-item" data-target="logs"><i class="ph ph-clock-counter-clockwise"></i> Log Aktivitas</a>
+                <a href="#" class="nav-item" id="logoutBtn"><i class="ph ph-sign-out"></i> Keluar</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="avatar"><i class="ph ph-user"></i></div>
+                    <div>
+                        <span class="user-name" id="userNameDisplay">Admin</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar glass-panel">
+                <button type="button" class="mobile-menu-btn" id="mobileMenuBtn"><i class="ph ph-list"></i></button>
+                <h1 id="pageTitle">Kalkulator Paket</h1>
+                <div class="actions" style="position: relative;">
+                    <button type="button" class="btn-icon" id="btnNotif" onclick="toggleNotif()" style="position:relative;">
+                        <i class="ph ph-bell"></i>
+                        <span id="notifBadge" style="display:none; position:absolute; top:6px; right:6px; width:10px; height:10px; background-color:var(--danger); border-radius:50%; border: 2px solid var(--bg-primary);"></span>
+                    </button>
+                    <!-- Notification Dropdown -->
+                    <div id="notifDropdown" class="hidden glass-panel notif-dropdown">
+                        <h4 style="margin-bottom:0.5rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:0.5rem; font-size:1rem;">Notifikasi</h4>
+                        <div id="notifList" style="max-height:200px; overflow-y:auto; font-size:0.85rem; display:flex; flex-direction:column; gap:0.5rem;">
+                            <p style="color:var(--text-muted); text-align:center;">Belum ada notifikasi</p>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn-icon" onclick="openSettingsModal()"><i class="ph ph-gear"></i></button>
+                </div>
+            </header>
+
+            <div class="content-area">
+                
+                <!-- Package Builder View -->
+                <div id="view-packages" class="view-section active fade-in">
+                    <div class="card glass-panel mb-4">
+                        <div class="card-header">
+                            <h3>Buat Perhitungan Paket Baru</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="packageBuilderForm" class="grid-form">
+                                <div class="form-group">
+                                    <label>Titik Mepo (Keberangkatan)</label>
+                                    <input type="text" id="pkgMepo" placeholder="Ketik Mepo (Misal: Sidoarjo)" style="font-size: 1.1rem; font-weight: bold; padding: 1rem;">
+                                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Menyaring Transportasi & Restoran</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Wilayah Tujuan Wisata</label>
+                                    <input type="text" id="pkgDest" placeholder="Ketik Tujuan (Misal: Bali)" style="font-size: 1.1rem; font-weight: bold; padding: 1rem;">
+                                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Menyaring Hotel, Tiket & Biaya Tambahan</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nama Paket</label>
+                                    <input type="text" id="pkgName" required placeholder="Contoh: Paket Bali A Premium">
+                                </div>
+                                <div class="form-group">
+                                    <label>Jumlah Peserta (Orang)</label>
+                                    <input type="number" id="pkgPax" required value="60">
+                                </div>
+
+                                <!-- Transport Selection -->
+                                <div class="form-group full-width section-title">
+                                    <h4><i class="ph ph-bus"></i> Armada / Transportasi</h4>
+                                </div>
+                                <div class="form-group">
+                                    <label>Pilih Armada dari Vendor</label>
+                                    <select id="pkgTransport" required>
+                                        <option value="">Memuat data...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Sewa untuk Berapa Hari?</label>
+                                    <input type="number" id="pkgTransportDays" value="3" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Biaya Tol & Parkir (Rp)</label>
+                                    <input type="number" id="pkgTollCost" value="500000">
+                                </div>
+                                <div class="form-group">
+                                    <label>Biaya Penyeberangan (Rp)</label>
+                                    <input type="number" id="pkgCrossCost" value="0">
+                                </div>
+
+                                <!-- Accommodation Selection -->
+                                <div class="form-group full-width section-title">
+                                    <h4><i class="ph ph-buildings"></i> Penginapan / Hotel</h4>
+                                </div>
+                                <div class="form-group">
+                                    <label>Pilih Hotel dari Vendor</label>
+                                    <select id="pkgHotel">
+                                        <option value="">Tanpa Menginap</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Jumlah Orang per Kamar</label>
+                                    <input type="number" id="pkgHotelPaxPerRoom" value="2" readonly style="background: rgba(255,255,255,0.05); color: var(--text-muted); cursor: not-allowed;" title="Terisi otomatis sesuai data hotel">
+                                </div>
+                                <div class="form-group">
+                                    <label>Menginap Berapa Malam?</label>
+                                    <input type="number" id="pkgHotelNights" value="1">
+                                </div>
+
+                                <!-- Meals Selection -->
+                                <div class="form-group full-width section-title">
+                                    <h4><i class="ph ph-fork-knife"></i> Konsumsi / Makanan</h4>
+                                </div>
+                                <div class="form-group">
+                                    <label>Pilih Paket Makan</label>
+                                    <select id="pkgMeal">
+                                        <option value="">Tanpa Konsumsi</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Total Berapa Kali Makan?</label>
+                                    <input type="number" id="pkgMealTimes" placeholder="Otomatis (3x sehari)">
+                                </div>
+
+                                <!-- Tickets Selection -->
+                                <div class="form-group full-width section-title">
+                                    <h4><i class="ph ph-ticket"></i> Tiket Wisata</h4>
+                                </div>
+                                <div class="form-group full-width">
+                                    <input type="text" id="pkgTicketSearch" placeholder="Cari tiket wisata..." class="mb-2" onkeyup="filterPkgTicket()" style="width:100%; padding:0.8rem; border-radius:8px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.05); color:var(--text-light);">
+                                    <div class="checkbox-group" id="pkgTicketCheckboxes">
+                                        <!-- Multi tickets injected here -->
+                                    </div>
+                                </div>
+
+                                <!-- Other Costs -->
+                                <div class="form-group full-width section-title">
+                                    <h4><i class="ph ph-users"></i> Biaya Jasa & Lainnya</h4>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Pilih Vendor Jasa Lainnya (Guide, Banner, Dokumentasi, dll)</label>
+                                    <input type="text" id="pkgOtherSearch" placeholder="Cari jasa..." onkeyup="filterPkgOther()">
+                                    <div class="checkbox-group" id="pkgOtherCheckboxes">
+                                        <!-- Checkboxes akan dirender oleh JS -->
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Biaya Snack & Air Mineral (Rp)</label>
+                                    <input type="number" id="pkgSnackCost" value="600000">
+                                </div>
+
+                                <!-- Pricing -->
+                                <div class="form-group full-width section-title">
+                                    <h4><i class="ph ph-money"></i> Harga Jual & Keuntungan</h4>
+                                </div>
+                                <div class="form-group">
+                                    <label>Rencana Harga Jual per Orang (Rp)</label>
+                                    <input type="number" id="pkgSellingPrice" readonly placeholder="Klik Hitung Rincian Biaya untuk Rekomendasi Harga" style="background:rgba(255,255,255,0.05);">
+                                    <p id="marginLabelDisplay" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;"></p>
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <button type="button" class="btn-primary" id="calculateBtn">
+                                        <i class="ph ph-calculator"></i> Hitung Rincian Biaya
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Result Panel -->
+                    <div id="calculationResult" class="card glass-panel hidden fade-in">
+                        <div class="card-header">
+                            <h3>Hasil Perhitungan (Rincian Biaya)</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="calc-grid">
+                                <div class="calc-box">
+                                    <span class="label">Total Harga Pokok Penjualan (HPP)</span>
+                                    <span class="value" id="resTotalReal">Rp 0</span>
+                                </div>
+                                <div class="calc-box">
+                                    <span class="label">HPP Asli per Orang</span>
+                                    <span class="value" id="resCostPerPax">Rp 0</span>
+                                </div>
+                                <div class="calc-box highlight">
+                                    <span class="label">Rekomendasi Harga Jual (Pembulatan)</span>
+                                    <span class="value success" id="resRecPrice">Rp 0</span>
+                                </div>
+                                <div class="calc-box highlight">
+                                    <span class="label">Total Keuntungan (Estimasi)</span>
+                                    <span class="value success" id="resTotalProfit">Rp 0</span>
+                                </div>
+                                <div class="calc-box highlight">
+                                    <span class="label">Laba Bersih per Orang</span>
+                                    <span class="value success" id="resProfitPerPax">Rp 0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4" style="background: rgba(0,0,0,0.2); padding:1.5rem; border-radius:var(--radius-sm); border:1px solid var(--glass-border);">
+                                <h4 style="margin-bottom:1rem; color:var(--text-secondary);">Rincian Detail HPP</h4>
+                                <table style="width:100%; border-collapse: collapse; font-size: 0.9rem;">
+                                    <tr><td style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">Transportasi</td><td style="text-align:right;" id="detTransport">Rp 0</td></tr>
+                                    <tr><td style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">Tiket Wisata</td><td style="text-align:right;" id="detTicket">Rp 0</td></tr>
+                                    <tr><td style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">Akomodasi (Hotel)</td><td style="text-align:right;" id="detHotel">Rp 0</td></tr>
+                                    <tr><td style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">Konsumsi</td><td style="text-align:right;" id="detMeal">Rp 0</td></tr>
+                                    <tr><td style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">Vendor Jasa Lainnya</td><td style="text-align:right;" id="detOther">Rp 0</td></tr>
+                                    <tr><td style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">Snack & Air Mineral</td><td style="text-align:right;" id="detSnack">Rp 0</td></tr>
+                                    <tr><td style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">Tol, Parkir & Penyeberangan</td><td style="text-align:right;" id="detCross">Rp 0</td></tr>
+                                    <tr><td style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);"><strong>Total HPP Asli</strong></td><td style="text-align:right;"><strong id="detTotal">Rp 0</strong></td></tr>
+                                    <tr><td style="padding:0.5rem 0; color: #10B981;">Total Cashback / Komisi Vendor</td><td style="text-align:right; color: #10B981;" id="detCashback">Rp 0</td></tr>
+                                </table>
+                            </div>
+
+                            <div class="mt-4 text-right">
+                                <button class="btn-primary" id="savePackageBtn">Simpan Paket ke Database Master</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Package List View -->
+                <div id="view-package-list" class="view-section fade-in" style="display:none;">
+                    <div class="card glass-panel">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table" id="adminPackageTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nama Paket</th>
+                                            <th>Pax</th>
+                                            <th>Total HPP</th>
+                                            <th>Harga Jual</th>
+                                            <th>Laba (Estimasi)</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Injected dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vendor Data View -->
+                <div id="view-vendors" class="view-section fade-in" style="display:none;">
+                    <div class="card glass-panel">
+                        <div class="card-header" style="justify-content: flex-start;">
+                            <div class="tabs">
+                                <button class="tab-btn active" data-cat="transport">Armada Bus</button>
+                                <button class="tab-btn" data-cat="hotel">Penginapan (Hotel)</button>
+                                <button class="tab-btn" data-cat="resto">Rumah Makan</button>
+                                <button class="tab-btn" data-cat="ticket">Tiket Wisata</button>
+                                <button class="tab-btn" data-cat="other">Jasa Lainnya</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table" id="adminVendorTable">
+                                    <thead>
+                                        <!-- Injected dynamically -->
+                                    </thead>
+                                    <tbody>
+                                        <!-- Injected dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="vendorLoading" class="loading-state">
+                                <i class="ph ph-spinner ph-spin"></i> Memuat data dari server...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Logs (New) -->
+            <section id="view-logs" class="view-section" style="display:none;">
+                <div class="section-header">
+                    <h2>Log Aktivitas (Audit Trail)</h2>
+                    <p style="color:var(--text-muted)">Melacak seluruh histori perubahan dari semua vendor dan sistem.</p>
+                </div>
+                
+                <div class="glass-panel" style="padding:1.5rem">
+                    <div style="overflow-x:auto;">
+                        <table class="data-table" id="adminLogsTable">
+                            <thead>
+                                <tr>
+                                    <th>Waktu</th>
+                                    <th>Aktor</th>
+                                    <th>Aksi</th>
+                                    <th>Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" style="text-align:center">Memuat data log...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Package Modal -->
+    <div id="editPackageModal" class="modal-overlay hidden">
+        <!-- Content sama dengan atas, nanti diisi via JS -->
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal-overlay hidden">
+        <div class="modal-content glass-panel" style="max-width:400px;">
+            <div class="modal-header">
+                <h2>Pengaturan Sistem</h2>
+                <button type="button" class="btn-icon" onclick="closeSettingsModal()"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body" style="padding:1.5rem;">
+                <div class="form-group mb-3">
+                    <label>Margin Keuntungan Default (%)</label>
+                    <input type="number" id="settingMargin" value="20" style="width:100%;">
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem;">Digunakan sebagai acuan saat menghitung Rekomendasi Harga Jual.</p>
+                </div>
+                <div class="form-group mb-4">
+                    <label>Sinkronisasi Data</label>
+                    <button type="button" class="btn btn-outline" style="width:100%; display:flex; justify-content:center; gap:0.5rem; align-items:center; margin-top:0.5rem;" onclick="syncData()">
+                        <i class="ph ph-arrows-clockwise"></i> Muat Ulang Data Spreadsheet
+                    </button>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.5rem;">Gunakan ini jika ada perubahan data langsung di Google Spreadsheet.</p>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding:1rem 1.5rem; border-top:1px solid rgba(255,255,255,0.1); display:flex; justify-content:flex-end; gap:1rem;">
+                <button type="button" class="btn btn-outline" onclick="closeSettingsModal()">Batal</button>
+                <button type="button" class="btn btn-primary" onclick="saveSettings()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Logic -->
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

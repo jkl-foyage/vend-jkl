@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Masuk ke Sistem Pembuat Paket Wisata B2B JAKALELANA">
+    <title>Masuk - JAKALELANA Tour & Travel</title>
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+    <link rel="manifest" href="assets/icons/site.webmanifest">
+    <link rel="shortcut icon" href="assets/icons/favicon.ico">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="login-page">
+    <div class="login-box glass-panel slide-up">
+        <div class="logo-area">
+            <img src="assets/icons/android-chrome-512x512.png" alt="JAKALELANA Logo" style="width: 72px; height: auto; margin-bottom: 0.5rem;">
+            <h2>JAKALELANA B2B</h2>
+            <p>Sistem Kemitraan & Paket Wisata B2B</p>
+        </div>
+        
+        <form id="loginForm" class="login-form">
+            <div class="input-group">
+                <label for="username">Nama Pengguna (Username)</label>
+                <div class="input-wrapper">
+                    <i class="ph ph-user"></i>
+                    <input type="text" id="username" name="username" placeholder="Masukkan nama pengguna" required>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Kata Sandi (Password)</label>
+                <div class="input-wrapper">
+                    <i class="ph ph-lock-key"></i>
+                    <input type="password" id="password" name="password" placeholder="Masukkan kata sandi" required>
+                </div>
+            </div>
+
+            <div id="loginError" class="error-message hidden">
+                <i class="ph ph-warning-circle"></i> <span>Kredensial tidak valid</span>
+            </div>
+
+            <button type="submit" class="btn-primary" id="loginBtn">
+                <span>Masuk Sekarang</span>
+                <i class="ph ph-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- App Logic -->
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
