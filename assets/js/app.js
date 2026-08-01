@@ -11,7 +11,8 @@ const state = {
         transport: [],
         hotel: [],
         resto: [],
-        ticket: []
+        ticket: [],
+        other: []
     },
     packages: [],
     ticketMeta: [] // Untuk rekomendasi auto-fill kategori & deskripsi
@@ -145,24 +146,36 @@ function initLogin() {
 function initAdmin() {
     document.getElementById('userNameDisplay').textContent = state.user.name;
 
-    // Navigation
+    // Navigation (Admin)
     document.querySelectorAll('.sidebar-nav .nav-item[data-target]').forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
+            
+            const target = item.getAttribute('data-target');
+            const targetView = document.getElementById('view-' + target);
+            
+            // FIX: Cegah JS Error jika elemen view/target tidak ada di HTML
+            if (!targetView) return; 
+
             document.querySelectorAll('.sidebar-nav .nav-item').forEach(n => n.classList.remove('active'));
             item.classList.add('active');
             
-            const target = item.getAttribute('data-target');
             document.querySelectorAll('.view-section').forEach(v => {
                 v.style.display = 'none';
                 v.classList.remove('active');
             });
-            document.getElementById('view-' + target).style.display = 'block';
-            document.getElementById('pageTitle').textContent = item.textContent.trim();
             
-            // Auto close mobile sidebar if open
-            if(window.innerWidth <= 768) {
-                document.querySelector('.sidebar').classList.remove('active');
+            targetView.style.display = 'block';
+            
+            const titleEl = document.getElementById('pageTitle');
+            if (titleEl) titleEl.textContent = item.textContent.trim();
+            
+            // FIX: Auto close mobile sidebar & hapus overlay gelap
+            if (window.innerWidth <= 768) {
+                const sidebar = document.querySelector('.sidebar');
+                const overlay = document.getElementById('sidebarOverlay');
+                if (sidebar) sidebar.classList.remove('active');
+                if (overlay) overlay.classList.remove('active');
             }
         });
     });
@@ -854,17 +867,23 @@ function initVendor() {
             }
         }).catch(err => console.log('Gagal memuat rekomendasi tiket:', err));
     }
-
     // Modal logic
+    
     const modal = document.getElementById('addItemModal');
     document.getElementById('addNewListingBtn').addEventListener('click', () => {
         document.getElementById('modalTitle').textContent = 'Formulir Layanan Baru';
         document.getElementById('deleteItemModalBtn').style.display = 'none';
         buildVendorForm(cat);
+        
+        // FIX: Reset isi formulir agar tidak nyangkut sisa data edit sebelumnya
+        const formEl = document.getElementById('vendorAddItemForm');
+        if(formEl) formEl.reset();
+
         const newId = generateId(cat, state.user.name, state.vendors[cat] || []);
         document.getElementById('vId').value = newId;
         modal.classList.remove('hidden');
     });
+
     document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.add('hidden'));
     document.getElementById('cancelModalBtn').addEventListener('click', () => modal.classList.add('hidden'));
     document.getElementById('saveItemBtn').addEventListener('click', () => saveVendorItemLive(cat));
@@ -874,18 +893,28 @@ function initVendor() {
     document.querySelectorAll('.sidebar-nav .nav-item[data-target]').forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
+            
+            const target = item.getAttribute('data-target');
+            const targetView = document.getElementById('view-' + target);
+            
+            // FIX: Cegah JS Error jika elemen view/target tidak ada di HTML
+            if (!targetView) return;
+
             document.querySelectorAll('.sidebar-nav .nav-item').forEach(n => n.classList.remove('active'));
             item.classList.add('active');
             
-            const target = item.getAttribute('data-target');
             document.querySelectorAll('.view-section').forEach(v => {
                 v.style.display = 'none';
                 v.classList.remove('active');
             });
-            document.getElementById('view-' + target).style.display = 'block';
-            document.getElementById('pageTitle').textContent = item.textContent.trim();
+            
+            targetView.style.display = 'block';
+            
+            const titleEl = document.getElementById('pageTitle');
+            if (titleEl) titleEl.textContent = item.textContent.trim();
         });
     });
+
 
     initProfileView();
 }
