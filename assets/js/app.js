@@ -45,16 +45,18 @@ function formatDateDisplay(dateStr) {
 
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
-    const path = window.location.pathname;
+    const path = window.location.pathname.toLowerCase();
     
-    if (path.includes('index.html') || path.endsWith('/')) {
-        initLogin();
-    } else if (path.includes('admin.html')) {
+    // Deteksi URL yang lebih fleksibel (mendukung Clean URLs Cloudflare)
+    if (path.includes('admin')) {
         if (!checkAuth('admin')) return;
         initAdmin();
-    } else if (path.includes('vendor.html')) {
+    } else if (path.includes('vendor')) {
         if (!checkAuth('vendor')) return;
         initVendor();
+    } else {
+        // Jika bukan admin dan vendor (root, index, dsb), jalankan Login
+        initLogin();
     }
 
     // Common Listeners
@@ -63,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('jkl_user');
-            window.location.href = 'index.html';
+            window.location.href = '/'; // Mengembalikan pengguna ke root domain (halaman login)
         });
     }
 });
