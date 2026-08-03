@@ -454,7 +454,8 @@ function saveVendorData(category, itemData) {
         'Service_Type': 'Jenis Layanan',
         'Price': 'Harga',
         'Unit': 'Satuan',
-        'Name': 'Nama'
+        'Name': 'Nama',
+        'Coordinate': 'Titik Koordinat'
     };
 
     const formatVal = (val) => {

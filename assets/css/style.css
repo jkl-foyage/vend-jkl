@@ -771,3 +771,14 @@ label {
     }
 }
 
+/* --- Leaflet Map Customization --- */
+.leaflet-container {
+    background: #111;
+    font-family: 'Outfit', sans-serif;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--glass-border);
+}
+/* Sembunyikan box panduan jalan putih dari Routing Machine agar desain dark-mode tetap bersih */
+.leaflet-routing-container {
+    display: none !important; 
+}

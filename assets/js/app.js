@@ -2,7 +2,7 @@
  * JAKALELANA B2B Package Builder - App Logic (Live API Version)
  */
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbxlfvaNmMErW72FNekV0iVBm7J-tti_jidPnMNggQEqpaaFve_ud2lZsEHtDdRbkB-l1Q/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxOXDZ6TZl88PcMLWdziHx59IUBSgiMQjKEEY9dQDTPTfzyCMDRUTpQ52Vei2ValRCHUg/exec';
 
 // --- State Management ---
 const state = {
@@ -259,7 +259,6 @@ function initAdmin() {
     });
 }
 
-// --- Removed Deep Compare Logic ---
 function formatPrice(val) {
     return 'Rp ' + parseInt(val || 0).toLocaleString('id-ID');
 }
@@ -798,6 +797,9 @@ function calculatePackageCost() {
 
     document.getElementById('calculationResult').classList.remove('hidden');
 
+    // Trigger Map Route generation
+    generateSmartRoute();
+
     lastCalculatedPackage = {
         Package_Name: document.getElementById('pkgName').value || 'Tanpa Nama',
         Total_Pax: pax,
@@ -1167,20 +1169,24 @@ window.editItem = function (id) {
         document.getElementById('vPrice').value = item.Price_Per_Day || '';
         document.getElementById('vFac').value = item.Facilities || '';
         if (document.getElementById('vLoc')) document.getElementById('vLoc').value = item.Location || '';
+        if (document.getElementById('vCoord')) document.getElementById('vCoord').value = item.Coordinate || '';
     } else if (cat === 'hotel') {
         document.getElementById('vPax').value = item.Pax_Per_Room || '';
         document.getElementById('vPrice').value = item.Price_Per_Room || '';
         document.getElementById('vFac').value = item.Facilities || '';
         if (document.getElementById('vLoc')) document.getElementById('vLoc').value = item.Location || '';
+        if (document.getElementById('vCoord')) document.getElementById('vCoord').value = item.Coordinate || '';
     } else if (cat === 'resto') {
         document.getElementById('vPrice').value = item.Price_Per_Pax || '';
         document.getElementById('vDesc').value = item.Description || '';
         if (document.getElementById('vLoc')) document.getElementById('vLoc').value = item.Location || '';
+        if (document.getElementById('vCoord')) document.getElementById('vCoord').value = item.Coordinate || '';
     } else if (cat === 'ticket') {
         document.getElementById('vPrice').value = item.Price_Per_Pax || '';
         document.getElementById('vLoc').value = item.Location || '';
         document.getElementById('vCat').value = item.Category || '';
         document.getElementById('vDesc').value = item.Description || '';
+        if (document.getElementById('vCoord')) document.getElementById('vCoord').value = item.Coordinate || '';
 
         // Picu logika auto-fill & lock untuk tiket eksisting
         setTimeout(() => {
@@ -1254,6 +1260,7 @@ function buildVendorForm(cat) {
             <div class="form-group full-width"><label>Lokasi Kota / Daerah (Mepo)</label><input type="text" id="vLoc" placeholder="Contoh: Malang"></div>
             <div class="form-group"><label>Harga Sewa Per Hari (Rp)</label><input type="number" id="vPrice" required></div>
             <div class="form-group full-width"><label>Fasilitas Unggulan</label><input type="text" id="vFac" placeholder="Contoh: AC, Reclining Seat, USB Charger, Toilet"></div>
+            <div class="form-group full-width"><label>Koordinat Peta (Latitude, Longitude)</label><input type="text" id="vCoord" placeholder="Contoh: -7.8837, 112.5293"></div>
         `;
     } else if (cat === 'hotel') {
         form.innerHTML = `
@@ -1263,6 +1270,7 @@ function buildVendorForm(cat) {
             <div class="form-group full-width"><label>Lokasi Kota / Daerah</label><input type="text" id="vLoc" placeholder="Contoh: Batu"></div>
             <div class="form-group"><label>Harga Per Malam (Rp)</label><input type="number" id="vPrice" required></div>
             <div class="form-group full-width"><label>Fasilitas Tambahan</label><input type="text" id="vFac" placeholder="Contoh: Sarapan, WiFi, Kolam Renang"></div>
+            <div class="form-group full-width"><label>Koordinat Peta (Latitude, Longitude)</label><input type="text" id="vCoord" placeholder="Contoh: -7.8837, 112.5293"></div>
         `;
     } else if (cat === 'resto') {
         form.innerHTML = `
@@ -1271,6 +1279,7 @@ function buildVendorForm(cat) {
             <div class="form-group full-width"><label>Lokasi Kota / Daerah (Mepo)</label><input type="text" id="vLoc" placeholder="Contoh: Probolinggo"></div>
             <div class="form-group"><label>Harga Per Orang (Rp)</label><input type="number" id="vPrice" required></div>
             <div class="form-group full-width"><label>Rincian Menu Lauk</label><input type="text" id="vDesc" placeholder="Contoh: Nasi Putih, Rendang, Sayur Nangka, Kerupuk, Buah"></div>
+            <div class="form-group full-width"><label>Koordinat Peta (Latitude, Longitude)</label><input type="text" id="vCoord" placeholder="Contoh: -7.8837, 112.5293"></div>
         `;
     } else if (cat === 'ticket') {
         form.innerHTML = `
@@ -1294,6 +1303,7 @@ function buildVendorForm(cat) {
                 <label>Deskripsi / Highlight Wisata</label>
                 <textarea id="vDesc" rows="3" placeholder="Contoh: Taman hiburan keluarga dengan wahana edukasi"></textarea>
             </div>
+            <div class="form-group full-width"><label>Koordinat Peta (Latitude, Longitude)</label><input type="text" id="vCoord" placeholder="Contoh: -7.8837, 112.5293"></div>
         `;
 
         // Setup Auto-fill & Datalist
@@ -1389,6 +1399,7 @@ function buildVendorForm(cat) {
             <div class="form-group"><label>Lokasi (Opsional)</label><input type="text" id="vLoc" placeholder="Contoh: Malang"></div>
             <div class="form-group"><label>Harga (Rp)</label><input type="number" id="vPrice" required></div>
             <div class="form-group"><label>Satuan Harga</label><input type="text" id="vUnit" required placeholder="Contoh: Per Pax, Per Hari, Per Grup"></div>
+            <div class="form-group full-width"><label>Koordinat Peta (Latitude, Longitude)</label><input type="text" id="vCoord" placeholder="Contoh: -7.8837, 112.5293"></div>
         `;
     }
 }
@@ -1409,25 +1420,30 @@ async function saveVendorItemLive(cat) {
         data.Facilities = document.getElementById('vFac').value;
         data.Price_Per_Day = document.getElementById('vPrice').value;
         data.Location = document.getElementById('vLoc').value;
+        if(document.getElementById('vCoord')) data.Coordinate = document.getElementById('vCoord').value;
     } else if (cat === 'hotel') {
         data.Pax_Per_Room = document.getElementById('vPax').value;
         data.Facilities = document.getElementById('vFac').value;
         data.Price_Per_Room = document.getElementById('vPrice').value;
         data.Location = document.getElementById('vLoc').value;
+        if(document.getElementById('vCoord')) data.Coordinate = document.getElementById('vCoord').value;
     } else if (cat === 'resto') {
         data.Description = document.getElementById('vDesc').value;
         data.Price_Per_Pax = document.getElementById('vPrice').value;
         data.Location = document.getElementById('vLoc').value;
+        if(document.getElementById('vCoord')) data.Coordinate = document.getElementById('vCoord').value;
     } else if (cat === 'ticket') {
         data.Location = document.getElementById('vLoc').value;
         data.Category = document.getElementById('vCat').value;
         data.Description = document.getElementById('vDesc').value;
         data.Price_Per_Pax = document.getElementById('vPrice').value;
+        if(document.getElementById('vCoord')) data.Coordinate = document.getElementById('vCoord').value;
     } else if (cat === 'other') {
         data.Service_Type = document.getElementById('vCat').value;
         data.Location = document.getElementById('vLoc').value;
         data.Price = document.getElementById('vPrice').value;
         data.Unit = document.getElementById('vUnit').value;
+        if(document.getElementById('vCoord')) data.Coordinate = document.getElementById('vCoord').value;
     }
 
     btn.innerHTML = 'Menyimpan...';
@@ -1632,3 +1648,235 @@ document.addEventListener('click', function(e) {
         e.target.classList.add('hidden');
     }
 });
+
+// --- MAP ROUTING FEATURE ---
+let leafletMap = null;
+let routingControl = null;
+
+async function geocodeLocation(query) {
+    // 1. Cek apakah query berupa koordinat (Latitude, Longitude)
+    // Contoh format: "-7.2504, 112.7688"
+    const coordMatch = query.match(/(-?\d+\.\d+),\s*(-?\d+\.\d+)/);
+    if (coordMatch) {
+        return L.latLng(parseFloat(coordMatch[1]), parseFloat(coordMatch[2]));
+    }
+
+    // 2. Fallback ke Nominatim jika berupa teks
+    try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
+        const data = await response.json();
+        if (data && data.length > 0) {
+            return L.latLng(data[0].lat, data[0].lon);
+        }
+    } catch (e) {
+        console.error("Geocoding failed for", query);
+    }
+    return null;
+}
+
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
+async function generateSmartRoute() {
+    const mapSection = document.getElementById('mapSection');
+    const loadingStatus = document.getElementById('mapLoadingStatus');
+    if(!mapSection || !loadingStatus) return;
+    
+    // Gather locations with types
+    const rawLocations = [];
+    
+    // 1. Mepo
+    const mepo = document.getElementById('pkgMepo').value;
+    if (mepo) rawLocations.push({ type: 'mepo', name: 'Mepo: ' + mepo, query: mepo });
+    
+    // 2. Resto
+    const mealId = document.getElementById('pkgMeal').value;
+    if (mealId) {
+        const r = state.vendors.resto.find(x => x.ID === mealId);
+        if (r) {
+            const query = r.Coordinate ? r.Coordinate : r.Location;
+            const restoName = r.Vendor_Name ? r.Vendor_Name : r.Name;
+            if (query) rawLocations.push({ type: 'resto', name: restoName, query: query });
+        }
+    }
+    
+    // 3. Tickets
+    const selectedTicketIds = Array.from(document.querySelectorAll('.ticket-checkbox:checked')).map(el => el.value);
+    selectedTicketIds.forEach(id => {
+        const t = state.vendors.ticket.find(x => x.ID === id);
+        if (t) {
+            const query = t.Coordinate ? t.Coordinate : t.Location;
+            if (query) rawLocations.push({ type: 'ticket', name: t.Name, query: query });
+        }
+    });
+
+    // 4. Hotel
+    const hotelId = document.getElementById('pkgHotel').value;
+    if (hotelId) {
+        const h = state.vendors.hotel.find(x => x.ID === hotelId);
+        if (h) {
+            const query = h.Coordinate ? h.Coordinate : h.Location;
+            const hotelName = h.Vendor_Name ? h.Vendor_Name : h.Name;
+            if (query) rawLocations.push({ type: 'hotel', name: hotelName, query: query });
+        }
+    }
+    
+    // 5. Destination
+    const dest = document.getElementById('pkgDest').value;
+    if (dest) {
+        rawLocations.push({ type: 'dest', name: 'Destinasi: ' + dest, query: dest });
+    }
+    
+    // Hapus duplikat berdasarkan query agar koordinat tidak di-fetch berulang kali
+    const uniqueQueries = new Set();
+    const locationsToGeocode = [];
+    rawLocations.forEach(loc => {
+        const q = loc.query.toLowerCase().trim();
+        if (q && !uniqueQueries.has(q)) {
+            uniqueQueries.add(q);
+            locationsToGeocode.push(loc);
+        }
+    });
+    
+    if (locationsToGeocode.length < 2) {
+        mapSection.style.display = 'none';
+        return;
+    }
+    
+    mapSection.style.display = 'block';
+    
+    // Initialize map if not yet
+    if (!leafletMap) {
+        // Initial center, will be fitted to route anyway
+        leafletMap = L.map('mapContainer').setView([-2.5489, 118.0149], 5); 
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 18
+        }).addTo(leafletMap);
+    }
+    
+    // Force leaflet to recalculate its size since it was hidden
+    setTimeout(() => {
+        leafletMap.invalidateSize();
+    }, 100);
+    
+    if (routingControl) {
+        leafletMap.removeControl(routingControl);
+        routingControl = null;
+    }
+    
+    const waypoints = [];
+    const failedLocations = [];
+    document.getElementById('routeTotalDistance').textContent = '-';
+    document.getElementById('routeTotalTime').textContent = '-';
+    
+    for (let i = 0; i < locationsToGeocode.length; i++) {
+        const loc = locationsToGeocode[i];
+        loadingStatus.innerHTML = `<i class="ph ph-spinner ph-spin"></i> Mencari koordinat: ${loc.name} (${i+1}/${locationsToGeocode.length})...`;
+        
+        const latLng = await geocodeLocation(loc.query);
+        if (latLng) {
+            const wp = new L.Routing.Waypoint(latLng, loc.name);
+            wp.locType = loc.type; // Save type for custom marker
+            waypoints.push(wp);
+        } else {
+            failedLocations.push(loc.name);
+        }
+        
+        // Throttling 1s to respect Nominatim rate limit
+        if (i < locationsToGeocode.length - 1) {
+            await delay(1000);
+        }
+    }
+    
+    if (waypoints.length < 2) {
+        let errMsg = "Gagal menghitung rute (Minimal butuh 2 titik).";
+        if (failedLocations.length > 0) {
+            errMsg += ` Tidak ditemukan: ${failedLocations.join(', ')}`;
+        }
+        loadingStatus.innerHTML = `<span style='color: var(--danger)'>${errMsg}</span>`;
+        return;
+    }
+    
+    loadingStatus.innerHTML = "Menggambar Rute Perjalanan...";
+    
+    routingControl = L.Routing.control({
+        waypoints: waypoints,
+        routeWhileDragging: false,
+        addWaypoints: false,
+        fitSelectedRoutes: true,
+        show: false, // Don't show the instruction box
+        lineOptions: {
+            styles: [{ color: '#06b6d4', opacity: 0.8, weight: 6 }]
+        },
+        createMarker: function(i, waypoint, n) {
+            let iconClass = 'ph-map-pin';
+            let bgColor = 'var(--accent-primary)';
+            let textColor = '#000';
+            
+            if (waypoint.locType === 'mepo') {
+                iconClass = 'ph-users';
+                bgColor = '#3B82F6'; // Blue
+                textColor = '#fff';
+            } else if (waypoint.locType === 'resto') {
+                iconClass = 'ph-fork-knife';
+                bgColor = '#F59E0B'; // Amber
+                textColor = '#fff';
+            } else if (waypoint.locType === 'ticket') {
+                iconClass = 'ph-ticket';
+                bgColor = '#10B981'; // Emerald
+                textColor = '#fff';
+            } else if (waypoint.locType === 'hotel') {
+                iconClass = 'ph-bed';
+                bgColor = '#F43F5E'; // Rose
+                textColor = '#fff';
+            } else if (waypoint.locType === 'dest') {
+                iconClass = 'ph-flag-checkered';
+                bgColor = '#EF4444'; // Red
+                textColor = '#fff';
+            }
+            
+            const customIcon = L.divIcon({
+                html: `<div style="background-color: ${bgColor}; color: ${textColor}; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.4); border: 2px solid #fff; font-size: 18px;">
+                        <i class="ph ${iconClass}"></i>
+                       </div>`,
+                className: '',
+                iconSize: [32, 32],
+                iconAnchor: [16, 16] // Center the icon
+            });
+            
+            return L.marker(waypoint.latLng, {
+                icon: customIcon,
+                title: waypoint.name
+            }).bindPopup(`<b style="color: #333; font-family: 'Outfit', sans-serif;">${waypoint.name}</b>`);
+        }
+    }).addTo(leafletMap);
+    
+    routingControl.on('routesfound', function(e) {
+        const routes = e.routes;
+        const summary = routes[0].summary;
+        // distance in meters to km
+        const distanceKm = (summary.totalDistance / 1000).toFixed(1);
+        // time in seconds
+        const timeHrs = Math.floor(summary.totalTime / 3600);
+        const timeMins = Math.round((summary.totalTime % 3600) / 60);
+        
+        document.getElementById('routeTotalDistance').textContent = `${distanceKm} Km`;
+        
+        let timeStr = '';
+        if (timeHrs > 0) timeStr += `${timeHrs} Jam `;
+        timeStr += `${timeMins} Menit`;
+        
+        document.getElementById('routeTotalTime').textContent = timeStr;
+        
+        let successMsg = `<span style='color: #10B981'><i class='ph ph-check-circle'></i> Peta Berhasil Dibuat.</span>`;
+        if (failedLocations.length > 0) {
+            successMsg += ` <span style='color: var(--warning); font-size: 0.85rem; margin-left: 0.5rem;'>(Tidak ditemukan: ${failedLocations.join(', ')})</span>`;
+        }
+        
+        loadingStatus.innerHTML = successMsg;
+    });
+
+    routingControl.on('routingerror', function() {
+        loadingStatus.innerHTML = "<span style='color: var(--danger)'>Gagal menghitung rute (jalan raya tidak tersedia antar titik).</span>";
+    });
+}

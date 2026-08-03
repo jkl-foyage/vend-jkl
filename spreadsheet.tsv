@@ -43,7 +43,7 @@ vendorbus2	bus123	vendor	transport	Harapan Jaya Trans	Marketing	-	Surabaya, Jawa
 wsp	bus123	vendor	transport	WSP Transport (PO Wali Songo Putra)	Marketing	'085335321008	Jl. Raya Suko No.5, Sidoarjo	
 
 Sheet: Vendors_Transport
-ID	Username_Vendor	Name	Capacity	Price_Per_Day	Facilities	Location	Update_Date	Cashback
+ID	Username_Vendor	Name	Capacity	Price_Per_Day	Facilities	Location	Update_Date	Cashback	Coordinate
 T-ALV-001	alvin	Isuzu Elf Panjang	21	1800000	AC, Reclining	Sidoarjo	18/02/2026	
 T-ASN-001	asnifah	Bus Menengah Standar	35	2500000	AC, TV, Karaoke	Sidoarjo	18/02/2026	
 T-BAC-001	bachri	Bus Menengah Standar	35	2500000	AC, TV, Karaoke	Sidoarjo	18/02/2026	
@@ -70,7 +70,7 @@ T-HRP-001	vendorbus2	Bus SHD Harapan Jaya	50	4200000	AC, Toilet, Bantal, Selimut
 T-WSP-001	wsp	Bus Besar Standar	60	2750000	Kapasitas besar, AC, TV, Karaoke	Sidoarjo	18/02/2026	200000
 
 Sheet: Vendors_Hotel
-ID	Username_Vendor	Name	Price_Per_Room	Pax_Per_Room	Facilities	Location	Update_Date	Cashback
+ID	Username_Vendor	Name	Price_Per_Room	Pax_Per_Room	Facilities	Location	Update_Date	Cashback	Coordinate
 H-BND-001	hotelbandung	Grand Lembang (Twin)	600000	2	AC, Breakfast	Bandung	18/02/2026	
 H-BND-002	hotelbandung	Grand Lembang (Family)	1200000	4	AC, Breakfast, Pool	Bandung	18/02/2026	
 H-BRO-001	hotelbromo	Bromo Permai (Twin)	450000	2	Hot Water, Breakfast	Bromo	18/02/2026	
@@ -89,7 +89,7 @@ H-HTL-001	vendorhotel	Superior Room (Twin)	450000	2	AC, TV, Breakfast, Pool, WiF
 H-HTL-002	vendorhotel	Family Room	850000	4	Breakfast, AC, TV, Pool	Malang	31/07/2026	
 
 Sheet: Vendors_Resto
-ID	Username_Vendor	Name	Price_Per_Pax	Description	Location	Update_Date	Cashback
+ID	Username_Vendor	Name	Price_Per_Pax	Description	Location	Update_Date	Cashback	Coordinate
 R-SOK-001	restobali	Paket Prasmanan Standar	35000	Nasi, Lauk Halal, Sayur, Es Teh	Bali	18/02/2026	
 R-SOK-002	restobali	Paket Prasmanan Seafood	60000	Nasi, Ikan Bakar, Cumi, Sayur	Bali	18/02/2026	
 R-DUT-001	restoduta	Paket Prasmanan Standar	25000	Nasi, Ayam, Sayur, Buah	Ngawi	18/02/2026	
@@ -102,11 +102,11 @@ R-TNG-001	restotongas	Paket Prasmanan Standar	25000	Nasi, Ayam, Lauk, Sayur, Min
 R-TNG-002	restotongas	Paket Prasmanan Premium	45000	Nasi, Daging, Ayam, Buah, Snack	Probolinggo	18/02/2026	
 R-UTA-001	restoutama	Paket Prasmanan Hemat	20000	Nasi, Lauk Pauk Standar Bus	Situbondo	18/02/2026	
 R-UTA-002	restoutama	Paket Prasmanan Spesial	35000	Nasi, Ikan/Ayam, Sayur, Kerupuk	Situbondo	18/02/2026	
-R-RMB-001	vendorresto	Paket Prasmanan Standar	25000	Nasi, Ayam Bakar, Sayur Asem, Kerupuk, Es Teh	Probolinggo	31/07/2026	
-R-RMB-002	vendorresto	Makan Premium Box	45000	Nasi, Rendang, Buah, Snack	Probolinggo	31/07/2026	
+R-RMB-001	vendorresto	Paket Prasmanan Standar	25000	Nasi, Ayam Bakar, Sayur Asem, Kerupuk, Es Teh	Probolinggo	31/07/2026
+R-RMB-002	vendorresto	Makan Premium Box	45000	Nasi, Rendang, Buah, Snack	Probolinggo	31/07/2026
 
 Sheet: Vendors_Ticket
-ID	Username_Vendor	Name	Price_Per_Pax	Location	Category	Description	Update_Date	Cashback
+ID	Username_Vendor	Name	Price_Per_Pax	Location	Category	Description	Update_Date	Cashback	Coordinate
 TK-TCK-001	jkl	Tanah Lot	35000	Bali	Budaya & Sejarah	Pura di atas batu karang, terkenal dengan matahari terbenam yang dramatis	18/02/2026	
 TK-TCK-002	jkl	Lovina	30000	Bali	Wisata Alam	Pantai tenang dengan lumba-lumba pagi hari dan pasir hitam eksotis	18/02/2026	
 TK-TCK-003	jkl	Melasti	150000	Bali	Wisata Alam	Pantai tersembunyi dengan tebing kapur curam dan pemandangan laut biru	18/02/2026	
@@ -195,7 +195,7 @@ TK-DRM-002	vendorticket	Borobudur	50000	Magelang	Budaya & Sejarah	Candi Buddha b
 TK-DRM-003	vendorticket	Pantai Pandawa	30000	Bali	Wisata Alam	Pantai indah berpasir putih dikelilingi tebing kapur ikonik	31/07/2026	
 
 Sheet: Vendors_Other
-ID	Username_Vendor	Name	Service_Type	Price	Unit	Location	Update_Date	Cashback
+ID	Username_Vendor	Name	Service_Type	Price	Unit	Location	Update_Date	Cashback	Coordinate
 O-BNR-001	vendorjasa	Banner Cetak (JAKALELANA)	Cetak Banner 3x1	100000	Per Trip	Sidoarjo	18/02/2026	
 O-GDE-001	vendorjasa	Tour Guid (JAKALELANA)	Tour Guide Lokal (Bali)	700000	Per Hari	Bali	18/02/2026	
 O-VID-001	vendorjasa	Videografer (JAKALELANA)	Jasa Videografer/Fotografer	1500000	Per Hari	Surabaya	18/02/2026	

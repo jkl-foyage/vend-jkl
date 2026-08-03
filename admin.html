@@ -19,6 +19,12 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Leaflet & OSRM -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
 </head>
 <body class="dashboard-page">
     <!-- Mobile Sidebar Overlay -->
@@ -245,6 +251,17 @@
                                     <tr><td style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);"><strong>Total HPP Asli</strong></td><td style="text-align:right;"><strong id="detTotal">Rp 0</strong></td></tr>
                                     <tr><td style="padding:0.5rem 0; color: #10B981;">Total Cashback / Komisi Vendor</td><td style="text-align:right; color: #10B981;" id="detCashback">Rp 0</td></tr>
                                 </table>
+                            </div>
+                            <div id="mapSection" class="mt-4" style="display:none; background: rgba(0,0,0,0.2); border-radius:var(--radius-sm); border:1px solid var(--glass-border); overflow:hidden;">
+                                <div style="padding:1rem; background:rgba(255,255,255,0.02); border-bottom:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-between; align-items:center;">
+                                    <h4 style="color:var(--text-secondary); margin:0;"><i class="ph ph-map-trifold"></i> Peta Rute & Estimasi</h4>
+                                    <span id="mapLoadingStatus" style="font-size:0.8rem; color:var(--accent-primary);"></span>
+                                </div>
+                                <div id="mapContainer" style="height: 350px; width:100%;"></div>
+                                <div id="routeInfoPanel" style="padding:1rem; display:flex; gap:2rem; background:rgba(0,0,0,0.4); font-size:0.9rem;">
+                                    <div><i class="ph ph-ruler"></i> Total Jarak: <strong id="routeTotalDistance" style="color:var(--accent-primary)">-</strong></div>
+                                    <div><i class="ph ph-clock"></i> Estimasi Waktu: <strong id="routeTotalTime" style="color:var(--accent-primary)">-</strong></div>
+                                </div>
                             </div>
 
                             <div class="mt-4 text-right">
