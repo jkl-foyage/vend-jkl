@@ -43,162 +43,162 @@ vendorbus2	bus123	vendor	transport	Harapan Jaya Trans	Marketing	-	Surabaya, Jawa
 wsp	bus123	vendor	transport	WSP Transport (PO Wali Songo Putra)	Marketing	'085335321008	Jl. Raya Suko No.5, Sidoarjo	
 
 Sheet: Vendors_Transport
-ID	Username_Vendor	Name	Capacity	Price_Per_Day	Facilities	Location	Update_Date
-T-ALV-001	alvin	Isuzu Elf Panjang	21	1800000	AC, Reclining	Sidoarjo	18/02/2026
-T-ASN-001	asnifah	Bus Menengah Standar	35	2500000	AC, TV, Karaoke	Sidoarjo	18/02/2026
-T-BAC-001	bachri	Bus Menengah Standar	35	2500000	AC, TV, Karaoke	Sidoarjo	18/02/2026
-T-BDP-001	bdputra	Bus Besar Standar	50	3500000	AC, TV, Karaoke, Reclining	Sidoarjo	18/02/2026
-T-BGB-001	bigbird	Bus Besar Premium	32	5000000	Premium service, AC, Toilet	Surabaya	18/02/2026
-T-BGB-002	bigbird	Bus Menengah Premium	20	3500000	Premium service, AC	Surabaya	18/02/2026
-T-DAY-001	daybus	Bus Besar Premium	32	4500000	Leg rest, AC, Toilet	Sidoarjo	18/02/2026
-T-DEN-001	denira	Bus Besar Standar	60	3500000	Kapasitas besar, AC, TV, Karaoke	Sidoarjo	18/02/2026
-T-DEN-002	denira	Toyota Hiace Premium	14	1500000	Interior mewah, AC	Sidoarjo	18/02/2026
-T-HMT-001	hmtrans	Bus Menengah Standar	35	2500000	AC, TV, Karaoke	Sidoarjo	18/02/2026
-T-KYM-001	kym	Bus Besar Standar	50	3500000	AC, TV, Karaoke, Reclining	Sidoarjo	18/02/2026
-T-MIL-001	milano	Toyota Hiace Premium	14	1500000	Interior mewah, AC	Sidoarjo	18/02/2026
-T-MOR-001	moroseneng	Toyota Hiace Komuter	14	1200000	AC, Nyaman	Sidoarjo	18/02/2026
-T-PAN-001	panji	Bus Menengah Premium	20	2800000	AC, Reclining, USB	Sidoarjo	18/02/2026
-T-RIZ-001	rizal	Isuzu Elf Standar	19	1400000	AC, Reclining	Sidoarjo	18/02/2026
-T-SUB-001	suburagung	Isuzu Elf Panjang	21	1800000	AC, Reclining	Sidoarjo	18/02/2026
-T-TRA-001	trac	Bus Besar Standar	50	4500000	Standard service, AC, TV	Surabaya	18/02/2026
-T-TRA-002	trac	Toyota Hiace Premium	14	1800000	Premium service, AC	Surabaya	18/02/2026
-T-TRW-001	transwisata	Bus Besar Standar	50	3500000	AC, TV, Karaoke, Reclining	Sidoarjo	18/02/2026
-T-VAC-001	vacation	Bus Besar Premium	32	4500000	Leg rest, AC, Toilet	Surabaya	18/02/2026
-T-TNR-001	vendorbus1	Bus JetBus 5 (TINARA TRANS)	50	4000000	AC, TV, Karaoke, Reclining	Sidoarjo	31/07/2026
-T-TNR-002	vendorbus1	Hiace Premium (TINARA TRANS)	14	1500000	AC, Reclining, USB	Sidoarjo	31/07/2026
-T-HRP-001	vendorbus2	Bus SHD Harapan Jaya	50	4200000	AC, Toilet, Bantal, Selimut	Surabaya	31/07/2026
-T-WSP-001	wsp	Bus Besar Standar	60	2750000	Kapasitas besar, AC, TV, Karaoke	Sidoarjo	18/02/2026
+ID	Username_Vendor	Name	Capacity	Price_Per_Day	Facilities	Location	Update_Date	Cashback
+T-ALV-001	alvin	Isuzu Elf Panjang	21	1800000	AC, Reclining	Sidoarjo	18/02/2026	
+T-ASN-001	asnifah	Bus Menengah Standar	35	2500000	AC, TV, Karaoke	Sidoarjo	18/02/2026	
+T-BAC-001	bachri	Bus Menengah Standar	35	2500000	AC, TV, Karaoke	Sidoarjo	18/02/2026	
+T-BDP-001	bdputra	Bus Besar Standar	50	3500000	AC, TV, Karaoke, Reclining	Sidoarjo	18/02/2026	
+T-BGB-001	bigbird	Bus Besar Premium	32	5000000	Premium service, AC, Toilet	Surabaya	18/02/2026	
+T-BGB-002	bigbird	Bus Menengah Premium	20	3500000	Premium service, AC	Surabaya	18/02/2026	
+T-DAY-001	daybus	Bus Besar Premium	32	4500000	Leg rest, AC, Toilet	Sidoarjo	18/02/2026	
+T-DEN-001	denira	Bus Besar Standar	60	3500000	Kapasitas besar, AC, TV, Karaoke	Sidoarjo	18/02/2026	
+T-DEN-002	denira	Toyota Hiace Premium	14	1500000	Interior mewah, AC	Sidoarjo	18/02/2026	
+T-HMT-001	hmtrans	Bus Menengah Standar	35	2500000	AC, TV, Karaoke	Sidoarjo	18/02/2026	
+T-KYM-001	kym	Bus Besar Standar	50	3500000	AC, TV, Karaoke, Reclining	Sidoarjo	18/02/2026	
+T-MIL-001	milano	Toyota Hiace Premium	14	1500000	Interior mewah, AC	Sidoarjo	18/02/2026	
+T-MOR-001	moroseneng	Toyota Hiace Komuter	14	1200000	AC, Nyaman	Sidoarjo	18/02/2026	
+T-PAN-001	panji	Bus Menengah Premium	20	2800000	AC, Reclining, USB	Sidoarjo	18/02/2026	
+T-RIZ-001	rizal	Isuzu Elf Standar	19	1400000	AC, Reclining	Sidoarjo	18/02/2026	
+T-SUB-001	suburagung	Isuzu Elf Panjang	21	1800000	AC, Reclining	Sidoarjo	18/02/2026	
+T-TRA-001	trac	Bus Besar Standar	50	4500000	Standard service, AC, TV	Surabaya	18/02/2026	
+T-TRA-002	trac	Toyota Hiace Premium	14	1800000	Premium service, AC	Surabaya	18/02/2026	
+T-TRW-001	transwisata	Bus Besar Standar	50	3500000	AC, TV, Karaoke, Reclining	Sidoarjo	18/02/2026	
+T-VAC-001	vacation	Bus Besar Premium	32	4500000	Leg rest, AC, Toilet	Surabaya	18/02/2026	
+T-TNR-001	vendorbus1	Bus JetBus 5 (TINARA TRANS)	50	4000000	AC, TV, Karaoke, Reclining	Sidoarjo	31/07/2026	
+T-TNR-002	vendorbus1	Hiace Premium (TINARA TRANS)	14	1500000	AC, Reclining, USB	Sidoarjo	31/07/2026	
+T-HRP-001	vendorbus2	Bus SHD Harapan Jaya	50	4200000	AC, Toilet, Bantal, Selimut	Surabaya	31/07/2026	
+T-WSP-001	wsp	Bus Besar Standar	60	2750000	Kapasitas besar, AC, TV, Karaoke	Sidoarjo	18/02/2026	200000
 
 Sheet: Vendors_Hotel
-ID	Username_Vendor	Name	Price_Per_Room	Pax_Per_Room	Facilities	Location	Update_Date
-H-BND-001	hotelbandung	Grand Lembang (Twin)	600000	2	AC, Breakfast	Bandung	18/02/2026
-H-BND-002	hotelbandung	Grand Lembang (Family)	1200000	4	AC, Breakfast, Pool	Bandung	18/02/2026
-H-BRO-001	hotelbromo	Bromo Permai (Twin)	450000	2	Hot Water, Breakfast	Bromo	18/02/2026
-H-BRO-002	hotelbromo	Bromo Permai (Family)	900000	4	Hot Water, Breakfast, View	Bromo	18/02/2026
-H-JOG-001	hoteljogja	Mutiara Malioboro (Twin)	450000	2	AC, Breakfast	Yogyakarta	18/02/2026
-H-JOG-002	hoteljogja	Mutiara Malioboro (Family)	800000	4	AC, Breakfast, Pool	Yogyakarta	18/02/2026
-H-LOM-001	hotellombok	Jayakarta Lombok (Twin)	450000	2	AC, Breakfast	Lombok	18/02/2026
-H-LOM-002	hotellombok	Jayakarta Lombok (Family)	850000	4	AC, Breakfast, Pool	Lombok	18/02/2026
-H-MAG-001	hotelmagelang	Puri Asri Magelang (Twin)	550000	2	AC, Breakfast	Magelang	18/02/2026
-H-MAG-002	hotelmagelang	Puri Asri Magelang (Family)	1000000	4	AC, Breakfast, Pool	Magelang	18/02/2026
-H-SOL-001	hotelsolo	Lorin Solo Hotel (Twin)	300000	2	AC, Breakfast	Solo	18/02/2026
-H-SOL-002	hotelsolo	Lorin Solo Hotel (Family)	600000	4	AC, Breakfast, Pool	Solo	18/02/2026
-H-ROF-001	rofa	Superior Room (Twin)	350000	2	AC, Pool, Breakfast	Bali	18/02/2026
-H-SUN-001	sunset	Premier Room (Twin/Double)	450000	2	AC, Pool, Breakfast, Ballroom	Bali	18/02/2026
-H-HTL-001	vendorhotel	Superior Room (Twin)	450000	2	AC, TV, Breakfast, Pool, WiFi	Malang	31/07/2026
-H-HTL-002	vendorhotel	Family Room	850000	4	Breakfast, AC, TV, Pool	Malang	31/07/2026
+ID	Username_Vendor	Name	Price_Per_Room	Pax_Per_Room	Facilities	Location	Update_Date	Cashback
+H-BND-001	hotelbandung	Grand Lembang (Twin)	600000	2	AC, Breakfast	Bandung	18/02/2026	
+H-BND-002	hotelbandung	Grand Lembang (Family)	1200000	4	AC, Breakfast, Pool	Bandung	18/02/2026	
+H-BRO-001	hotelbromo	Bromo Permai (Twin)	450000	2	Hot Water, Breakfast	Bromo	18/02/2026	
+H-BRO-002	hotelbromo	Bromo Permai (Family)	900000	4	Hot Water, Breakfast, View	Bromo	18/02/2026	
+H-JOG-001	hoteljogja	Mutiara Malioboro (Twin)	450000	2	AC, Breakfast	Yogyakarta	18/02/2026	
+H-JOG-002	hoteljogja	Mutiara Malioboro (Family)	800000	4	AC, Breakfast, Pool	Yogyakarta	18/02/2026	
+H-LOM-001	hotellombok	Jayakarta Lombok (Twin)	450000	2	AC, Breakfast	Lombok	18/02/2026	
+H-LOM-002	hotellombok	Jayakarta Lombok (Family)	850000	4	AC, Breakfast, Pool	Lombok	18/02/2026	
+H-MAG-001	hotelmagelang	Puri Asri Magelang (Twin)	550000	2	AC, Breakfast	Magelang	18/02/2026	
+H-MAG-002	hotelmagelang	Puri Asri Magelang (Family)	1000000	4	AC, Breakfast, Pool	Magelang	18/02/2026	
+H-SOL-001	hotelsolo	Lorin Solo Hotel (Twin)	300000	2	AC, Breakfast	Solo	18/02/2026	
+H-SOL-002	hotelsolo	Lorin Solo Hotel (Family)	600000	4	AC, Breakfast, Pool	Solo	18/02/2026	
+H-ROF-001	rofa	Superior Room (Twin)	350000	2	AC, Pool, Breakfast	Bali	18/02/2026	
+H-SUN-001	sunset	Premier Room (Twin/Double)	450000	2	AC, Pool, Breakfast, Ballroom	Bali	18/02/2026	
+H-HTL-001	vendorhotel	Superior Room (Twin)	450000	2	AC, TV, Breakfast, Pool, WiFi	Malang	31/07/2026	
+H-HTL-002	vendorhotel	Family Room	850000	4	Breakfast, AC, TV, Pool	Malang	31/07/2026	
 
 Sheet: Vendors_Resto
-ID	Username_Vendor	Name	Price_Per_Pax	Description	Location	Update_Date
-R-SOK-001	restobali	Paket Prasmanan Standar	35000	Nasi, Lauk Halal, Sayur, Es Teh	Bali	18/02/2026
-R-SOK-002	restobali	Paket Prasmanan Seafood	60000	Nasi, Ikan Bakar, Cumi, Sayur	Bali	18/02/2026
-R-DUT-001	restoduta	Paket Prasmanan Standar	25000	Nasi, Ayam, Sayur, Buah	Ngawi	18/02/2026
-R-DUT-002	restoduta	Paket Prasmanan Ekstra	40000	Nasi, Daging Sapi, Sayur, Snack	Ngawi	18/02/2026
-R-KUR-001	restokurnia	Paket Prasmanan Hemat	22000	Nasi, Lauk Ayam, Es Teh	Ngawi	18/02/2026
-R-PRW-001	restopurwodadi	Paket Prasmanan Standar	30000	Nasi, Ayam, Lauk Pauk	Pasuruan	18/02/2026
-R-TMS-001	restosolo	Paket Prasmanan Solo	35000	Nasi Liwet/Timlo, Lauk, Minum	Solo	18/02/2026
-R-TIT-001	restotitin	Paket Prasmanan Rombongan Bus	25000	Nasi, Ayam Lodho, Lauk, Sayur	Banyuwangi	18/02/2026
-R-TNG-001	restotongas	Paket Prasmanan Standar	25000	Nasi, Ayam, Lauk, Sayur, Minum	Probolinggo	18/02/2026
-R-TNG-002	restotongas	Paket Prasmanan Premium	45000	Nasi, Daging, Ayam, Buah, Snack	Probolinggo	18/02/2026
-R-UTA-001	restoutama	Paket Prasmanan Hemat	20000	Nasi, Lauk Pauk Standar Bus	Situbondo	18/02/2026
-R-UTA-002	restoutama	Paket Prasmanan Spesial	35000	Nasi, Ikan/Ayam, Sayur, Kerupuk	Situbondo	18/02/2026
-R-RMB-001	vendorresto	Paket Prasmanan Standar	25000	Nasi, Ayam Bakar, Sayur Asem, Kerupuk, Es Teh	Probolinggo	31/07/2026
-R-RMB-002	vendorresto	Makan Premium Box	45000	Nasi, Rendang, Buah, Snack	Probolinggo	31/07/2026
+ID	Username_Vendor	Name	Price_Per_Pax	Description	Location	Update_Date	Cashback
+R-SOK-001	restobali	Paket Prasmanan Standar	35000	Nasi, Lauk Halal, Sayur, Es Teh	Bali	18/02/2026	
+R-SOK-002	restobali	Paket Prasmanan Seafood	60000	Nasi, Ikan Bakar, Cumi, Sayur	Bali	18/02/2026	
+R-DUT-001	restoduta	Paket Prasmanan Standar	25000	Nasi, Ayam, Sayur, Buah	Ngawi	18/02/2026	
+R-DUT-002	restoduta	Paket Prasmanan Ekstra	40000	Nasi, Daging Sapi, Sayur, Snack	Ngawi	18/02/2026	
+R-KUR-001	restokurnia	Paket Prasmanan Hemat	22000	Nasi, Lauk Ayam, Es Teh	Ngawi	18/02/2026	
+R-PRW-001	restopurwodadi	Paket Prasmanan Standar	30000	Nasi, Ayam, Lauk Pauk	Pasuruan	18/02/2026	
+R-TMS-001	restosolo	Paket Prasmanan Solo	35000	Nasi Liwet/Timlo, Lauk, Minum	Solo	18/02/2026	
+R-TIT-001	restotitin	Paket Prasmanan Rombongan Bus	25000	Nasi, Ayam Lodho, Lauk, Sayur	Banyuwangi	18/02/2026	
+R-TNG-001	restotongas	Paket Prasmanan Standar	25000	Nasi, Ayam, Lauk, Sayur, Minum	Probolinggo	18/02/2026	
+R-TNG-002	restotongas	Paket Prasmanan Premium	45000	Nasi, Daging, Ayam, Buah, Snack	Probolinggo	18/02/2026	
+R-UTA-001	restoutama	Paket Prasmanan Hemat	20000	Nasi, Lauk Pauk Standar Bus	Situbondo	18/02/2026	
+R-UTA-002	restoutama	Paket Prasmanan Spesial	35000	Nasi, Ikan/Ayam, Sayur, Kerupuk	Situbondo	18/02/2026	
+R-RMB-001	vendorresto	Paket Prasmanan Standar	25000	Nasi, Ayam Bakar, Sayur Asem, Kerupuk, Es Teh	Probolinggo	31/07/2026	
+R-RMB-002	vendorresto	Makan Premium Box	45000	Nasi, Rendang, Buah, Snack	Probolinggo	31/07/2026	
 
 Sheet: Vendors_Ticket
-ID	Username_Vendor	Name	Price_Per_Pax	Location	Category	Description	Update_Date
-TK-TCK-001	jkl	Tanah Lot	35000	Bali	Budaya & Sejarah	Pura di atas batu karang, terkenal dengan matahari terbenam yang dramatis	18/02/2026
-TK-TCK-002	jkl	Lovina	30000	Bali	Wisata Alam	Pantai tenang dengan lumba-lumba pagi hari dan pasir hitam eksotis	18/02/2026
-TK-TCK-003	jkl	Melasti	150000	Bali	Wisata Alam	Pantai tersembunyi dengan tebing kapur curam dan pemandangan laut biru	18/02/2026
-TK-TCK-004	jkl	Tanjung Benoa	30000	Bali	Wisata Alam	Pusat olahraga air seru seperti parasailing dan jet ski	18/02/2026
-TK-TCK-005	jkl	GWK	150000	Bali	Budaya & Sejarah	Taman budaya dengan patung Garuda Wisnu raksasa yang ikonik	18/02/2026
-TK-TCK-006	jkl	Cening Bagus	0	Bali	Wisata Alam	Bukit hijau dengan panorama alam asri dan udara sejuk	18/02/2026
-TK-TCK-007	jkl	Uluwatu	150000	Bali	Budaya & Sejarah	Pura di tebing dengan pertunjukan Kecak saat senja dan pemandangan laut	18/02/2026
-TK-TCK-008	jkl	Panglipuran	35000	Bali	Budaya & Sejarah	Desa tradisional Bali yang terawat rapi, penuh nuansa budaya asli	18/02/2026
-TK-TCK-009	jkl	Joger	0	Bali	Belanja / Souvenir	Toko oleh-oleh kreatif dengan desain khas Bali	18/02/2026
-TK-TCK-010	jkl	Krisna	0	Bali	Belanja / Souvenir	Pusat belanja oleh-oleh lengkap dengan camilan dan kerajinan lokal	18/02/2026
-TK-TCK-011	jkl	Live Tari Kecak	0	Bali	Seni & Pertunjukan	Pertunjukan Kecak penuh energi diiringi nyanyian api dan legenda Ramayana	18/02/2026
-TK-TCK-012	jkl	Tari Barong	150000	Bali	Seni & Pertunjukan	Seni pertunjukan Barong dan Rangda, simbol keseimbangan kebaikan dan kejahatan	18/02/2026
-TK-TCK-013	jkl	Garuda Wisnu Kencana	0	Bali	Budaya & Sejarah	Patung monumental di taman budaya dengan lanskap pegunungan	18/02/2026
-TK-TCK-014	jkl	Desa Adat Penglipuran	0	Bali	Budaya & Sejarah	Desa tradisional dengan jalan setapak bersih dan rumah khas Bali	18/02/2026
-TK-TCK-015	jkl	Pantai Pandawa	35000	Bali	Wisata Alam	Pantai tersembunyi dengan tebing kapur dan pasir putih lembut	18/02/2026
-TK-TCK-016	jkl	Nuanu Creative City	50000	Bali	Seni & Pertunjukan	Tempat seni kontemporer dengan café dan workshop kreatif	18/02/2026
-TK-TCK-017	jkl	Danau Bedugul	50000	Bali	Wisata Alam	Danau pegunungan dengan udara sejuk dan pemandangan hijau menenangkan	18/02/2026
-TK-TCK-018	jkl	Gunung Batur	25000	Bali	Wisata Alam	Gunung berapi aktif, populer untuk trekking sunrise menakjubkan	18/02/2026
-TK-TCK-019	jkl	Grand Puncak Sari	25000	Bali	Kuliner	Restoran dengan panorama pegunungan dan hidangan lokal	18/02/2026
-TK-TCK-020	jkl	Kintamani	25000	Bali	Wisata Alam	Kawasan pegunungan sejuk dengan Danau Batur yang indah	18/02/2026
-TK-TCK-021	jkl	Lunch All You Can Eat Kintamani	300000	Bali	Kuliner	Pengalaman makan buffet dengan pemandangan alam Kintamani	18/02/2026
-TK-TCK-022	jkl	Dinner Jimbaran	15000	Bali	Kuliner	Seafood segar di tepi pantai sambil menikmati sunset	18/02/2026
-TK-TCK-023	jkl	Pantai Jimbaran	35000	Bali	Wisata Alam	Pasir putih dan ombak tenang untuk bersantai atau berjalan kaki	18/02/2026
-TK-TCK-024	jkl	Pantai Melasti	35000	Bali	Wisata Alam	Pantai indah dengan tebing tinggi dan laut jernih	18/02/2026
-TK-TCK-025	jkl	Tirta Empul	0	Bali	Budaya & Sejarah	Pura dengan mata air suci, tempat ritual penyucian tradisional	18/02/2026
-TK-TCK-026	jkl	Waterblow Nusa Dua	50000	Bali	Wisata Alam	Semburan air laut alami dari tebing karang yang menakjubkan	18/02/2026
-TK-TCK-027	jkl	Pura Tanah Lot	35000	Bali	Budaya & Sejarah	Pura ikonik di batu karang, populer untuk foto matahari terbenam	18/02/2026
-TK-TCK-028	jkl	Pura Ulun Danu Batur	50000	Bali	Budaya & Sejarah	Pura di tepi Danau Batur dengan pemandangan menenangkan	18/02/2026
-TK-TCK-029	jkl	Desa Trunyan	0	Bali	Budaya & Sejarah	Desa unik di tepi Danau Batur dengan tradisi berbeda dari desa Bali lainnya	18/02/2026
-TK-TCK-030	jkl	Lunch View Danau Batur	300000	Bali	Kuliner	Restoran dengan panorama Danau Batur yang memesona	18/02/2026
-TK-TCK-031	jkl	Coffee Luwak	0	Bali	Kuliner	Kopi luwak khas Bali, terkenal dan nikmat	18/02/2026
-TK-TCK-032	jkl	Bukit Cinta	0	Bali	Wisata Alam	Bukit hijau romantis dengan pemandangan lembah dan sungai	18/02/2026
-TK-TCK-033	jkl	Borobudur	120000	Yogyakarta	Budaya & Sejarah	Candi Buddha terbesar di dunia dengan relief epik dan sejarah mendalam	18/02/2026
-TK-TCK-034	jkl	Lava Tour	450000	Yogyakarta	Wisata Alam	Petualangan jeep melalui aliran lava Gunung Merapi	18/02/2026
-TK-TCK-035	jkl	Breksi	15000	Yogyakarta	Wisata Alam	Tebing kapur dengan panorama sunset dan spot foto unik	18/02/2026
-TK-TCK-036	jkl	Kraton	30000	Yogyakarta	Budaya & Sejarah	Istana keraton dengan sejarah kerajaan Yogyakarta	18/02/2026
-TK-TCK-037	jkl	Malioboro	0	Yogyakarta	Belanja / Souvenir	Jalan ikonik dengan pedagang kaki lima, toko, dan kuliner khas	18/02/2026
-TK-TCK-038	jkl	Pathok	0	Yogyakarta	Belanja / Souvenir	Pusat kerajinan lokal dan oleh-oleh khas Yogyakarta	18/02/2026
-TK-TCK-039	jkl	Golden Sunrise Maha Sky Batu Angkruk	50000	Yogyakarta	Wisata Alam	Bukit dengan sunrise memukau dan spot selfie cantik	18/02/2026
-TK-TCK-040	jkl	Kawah Sikidang	15000	Yogyakarta	Wisata Alam	Kawah aktif dengan uap belerang khas dan pemandangan vulkanik	18/02/2026
-TK-TCK-041	jkl	Candi Arjuna	15000	Yogyakarta	Budaya & Sejarah	Candi Hindu kuno dengan arsitektur dan relief menarik	18/02/2026
-TK-TCK-042	jkl	Studio Alam Gamplong	0	Yogyakarta	Edukasi & Hiburan	Lokasi syuting film dan replika desa tradisional Jawa	18/02/2026
-TK-TCK-043	jkl	Sunset Tebing Breksi	15000	Yogyakarta	Wisata Alam	Tebing kapur dengan panorama matahari terbenam yang dramatis	18/02/2026
-TK-TCK-044	jkl	Jogja T-shirt	0	Yogyakarta	Belanja / Souvenir	Toko kaos unik khas Yogyakarta	18/02/2026
-TK-TCK-045	jkl	Candi Prambanan	150000	Yogyakarta	Budaya & Sejarah	Candi Hindu megah dengan arsitektur indah dan cerita Ramayana	18/02/2026
-TK-TCK-046	jkl	Pantai Parang Tritis	25000	Yogyakarta	Wisata Alam	Pantai berpasir hitam dengan ombak dramatis dan suasana santai	18/02/2026
-TK-TCK-047	jkl	Jatim Park	110000	Malang	Edukasi & Hiburan	Taman hiburan edukatif untuk keluarga dan anak-anak	18/02/2026
-TK-TCK-048	jkl	Kusuma Agrowisata	0	Malang	Edukasi & Hiburan	Wisata kebun dan agro dengan aktivitas memetik buah	18/02/2026
-TK-TCK-049	jkl	Petik Buah	0	Malang	Edukasi & Hiburan	Kegiatan langsung memetik buah segar dari kebun	18/02/2026
-TK-TCK-050	jkl	Outbound	0	Malang	Adventure / Aktivitas	Area aktivitas fisik dan tantangan outdoor seru	18/02/2026
-TK-TCK-051	jkl	Oleh-oleh Kayutangan 360	25000	Malang	Belanja / Souvenir	Pusat oleh-oleh khas Malang dengan kerajinan dan makanan	18/02/2026
-TK-TCK-052	jkl	Keraton Solo	50000	Solo	Budaya & Sejarah	Istana dan pusat budaya Solo, sejarah kaya dan arsitektur klasik	18/02/2026
-TK-TCK-053	jkl	Kemuning	0	Solo	Wisata Alam	Hutan hijau dan alam tenang untuk relaksasi	18/02/2026
-TK-TCK-054	jkl	Tjolomadoe	0	Solo	Budaya & Sejarah	Museum gula dengan sejarah dan arsitektur industri kuno	18/02/2026
-TK-TCK-055	jkl	Klewer	0	Solo	Belanja / Souvenir	Pasar tekstil terbesar di Solo, terkenal untuk batik dan souvenir	18/02/2026
-TK-TCK-056	jkl	Sheikh Zayed Solo	0	Solo	Budaya & Sejarah	Masjid modern dengan arsitektur unik dan megah	18/02/2026
-TK-TCK-057	jkl	Kawah Rengganis	0	Bandung	Wisata Alam	Kawah alam di pegunungan dengan pemandangan menawan	18/02/2026
-TK-TCK-058	jkl	Keranjang Sultan	0	Bandung	Belanja / Souvenir	Toko oleh-oleh khas Bandung lengkap	18/02/2026
-TK-TCK-059	jkl	Jembatan Gantung Rengganis	0	Bandung	Wisata Alam	Jembatan gantung dengan panorama alam yang memikat	18/02/2026
-TK-TCK-060	jkl	Glamping Lakeside	0	Bandung	Wisata Alam	Glamping nyaman di tepi danau dengan alam hijau	18/02/2026
-TK-TCK-061	jkl	Tangkuban Perahu	0	Bandung	Wisata Alam	Gunung berapi dengan kawah unik dan udara sejuk	18/02/2026
-TK-TCK-062	jkl	Emte Highland	0	Bandung	Wisata Alam	Pegunungan hijau dengan perkebunan teh dan udara segar	18/02/2026
-TK-TCK-063	jkl	Alun-alun Bandung	0	Bandung	Budaya & Sejarah	Pusat kota dengan landmark ikonik dan suasana ramai	18/02/2026
-TK-TCK-064	jkl	Pusat Oleh-oleh Karma	0	Bandung	Belanja / Souvenir	Toko oleh-oleh khas Bandung lengkap	18/02/2026
-TK-TCK-065	jkl	Pusat Oleh-oleh Kunafe	0	Bandung	Belanja / Souvenir	Pusat belanja souvenir dan makanan khas Bandung	18/02/2026
-TK-TCK-066	jkl	Bukit Merese	0	Lombok	Wisata Alam	Bukit cantik dengan panorama pantai dan sunset eksotis	18/02/2026
-TK-TCK-067	jkl	Pantai Kuta Mandalika	0	Lombok	Wisata Alam	Pantai putih luas, populer untuk surfing dan bersantai	18/02/2026
-TK-TCK-068	jkl	Sirkuit Internasional Mandalika	0	Lombok	Adventure / Aktivitas	Sirkuit balap internasional, pusat event motorsport	18/02/2026
-TK-TCK-069	jkl	Desa Sasak Ende	0	Lombok	Budaya & Sejarah	Desa tradisional Sasak dengan rumah adat dan kehidupan lokal	18/02/2026
-TK-TCK-070	jkl	Sukarara	0	Lombok	Budaya & Sejarah	Desa pengrajin tenun khas Lombok dengan kerajinan tangan unik	18/02/2026
-TK-TCK-071	jkl	Gili Air	0	Lombok	Wisata Alam	Pulau kecil dengan pantai cantik dan spot snorkeling	18/02/2026
-TK-TCK-072	jkl	Gili Meno	0	Lombok	Wisata Alam	Pulau tenang dengan pasir putih bersih dan suasana damai	18/02/2026
-TK-TCK-073	jkl	Gili Trawangan	0	Lombok	Wisata Alam	Pulau populer dengan aktivitas wisata lengkap dan nightlife santai	18/02/2026
-TK-TCK-074	jkl	Teluk Nara	0	Lombok	Wisata Alam	Pantai alami dengan perairan jernih dan pemandangan indah	18/02/2026
-TK-TCK-075	jkl	Lombok Exotic	0	Lombok	Wisata Alam	Wisata alam dan aktivitas outdoor unik di Lombok	18/02/2026
-TK-TCK-076	jkl	Sasaku	0	Lombok	Budaya & Sejarah	Desa tradisional dengan budaya dan rumah khas Lombok	18/02/2026
-TK-TCK-077	jkl	Kuliner Ayam Taliwang	0	Lombok	Kuliner	Makanan pedas khas Lombok, ayam taliwang autentik	18/02/2026
-TK-TCK-078	jkl	Oleh-oleh Mutiara Lombok	0	Lombok	Belanja / Souvenir	Oleh-oleh khas Lombok, termasuk mutiara dan kerajinan lokal	18/02/2026
-TK-TCK-079	jkl	Sunrise Point	0	Bromo	Wisata Alam	Spot terbaik menikmati matahari terbit di Gunung Bromo	18/02/2026
-TK-TCK-080	jkl	Widodaren Gunung Batok	0	Bromo	Wisata Alam	Bukit hijau dengan panorama kawah dan pegunungan	18/02/2026
-TK-TCK-081	jkl	Kawah Bromo	0	Bromo	Wisata Alam	Gunung berapi aktif dengan pemandangan kawah spektakuler	18/02/2026
-TK-TCK-082	jkl	Pasir Berbisik	0	Bromo	Wisata Alam	Pasir luas dan unik yang menghasilkan suara saat diinjak angin	18/02/2026
-TK-TCK-083	jkl	Bukit Teletubbies	0	Bromo	Wisata Alam	Bukit hijau bergelombang dengan pemandangan seperti dunia dongeng	18/02/2026
-TK-DRM-001	vendorticket	Jatim Park I / II	120000	Malang	Edukasi & Hiburan	Taman hiburan keluarga dan kebun binatang dengan aneka wahana seru	31/07/2026
-TK-DRM-002	vendorticket	Borobudur	50000	Magelang	Budaya & Sejarah	Candi Buddha bersejarah terbesar dengan arsitektur menakjubkan	31/07/2026
-TK-DRM-003	vendorticket	Pantai Pandawa	30000	Bali	Wisata Alam	Pantai indah berpasir putih dikelilingi tebing kapur ikonik	31/07/2026
+ID	Username_Vendor	Name	Price_Per_Pax	Location	Category	Description	Update_Date	Cashback
+TK-TCK-001	jkl	Tanah Lot	35000	Bali	Budaya & Sejarah	Pura di atas batu karang, terkenal dengan matahari terbenam yang dramatis	18/02/2026	
+TK-TCK-002	jkl	Lovina	30000	Bali	Wisata Alam	Pantai tenang dengan lumba-lumba pagi hari dan pasir hitam eksotis	18/02/2026	
+TK-TCK-003	jkl	Melasti	150000	Bali	Wisata Alam	Pantai tersembunyi dengan tebing kapur curam dan pemandangan laut biru	18/02/2026	
+TK-TCK-004	jkl	Tanjung Benoa	30000	Bali	Wisata Alam	Pusat olahraga air seru seperti parasailing dan jet ski	18/02/2026	
+TK-TCK-005	jkl	GWK	150000	Bali	Budaya & Sejarah	Taman budaya dengan patung Garuda Wisnu raksasa yang ikonik	18/02/2026	
+TK-TCK-006	jkl	Cening Bagus	0	Bali	Wisata Alam	Bukit hijau dengan panorama alam asri dan udara sejuk	18/02/2026	
+TK-TCK-007	jkl	Uluwatu	150000	Bali	Budaya & Sejarah	Pura di tebing dengan pertunjukan Kecak saat senja dan pemandangan laut	18/02/2026	
+TK-TCK-008	jkl	Panglipuran	35000	Bali	Budaya & Sejarah	Desa tradisional Bali yang terawat rapi, penuh nuansa budaya asli	18/02/2026	
+TK-TCK-009	jkl	Joger	0	Bali	Belanja / Souvenir	Toko oleh-oleh kreatif dengan desain khas Bali	18/02/2026	
+TK-TCK-010	jkl	Krisna	0	Bali	Belanja / Souvenir	Pusat belanja oleh-oleh lengkap dengan camilan dan kerajinan lokal	18/02/2026	
+TK-TCK-011	jkl	Live Tari Kecak	0	Bali	Seni & Pertunjukan	Pertunjukan Kecak penuh energi diiringi nyanyian api dan legenda Ramayana	18/02/2026	
+TK-TCK-012	jkl	Tari Barong	150000	Bali	Seni & Pertunjukan	Seni pertunjukan Barong dan Rangda, simbol keseimbangan kebaikan dan kejahatan	18/02/2026	
+TK-TCK-013	jkl	Garuda Wisnu Kencana	0	Bali	Budaya & Sejarah	Patung monumental di taman budaya dengan lanskap pegunungan	18/02/2026	
+TK-TCK-014	jkl	Desa Adat Penglipuran	0	Bali	Budaya & Sejarah	Desa tradisional dengan jalan setapak bersih dan rumah khas Bali	18/02/2026	
+TK-TCK-015	jkl	Pantai Pandawa	35000	Bali	Wisata Alam	Pantai tersembunyi dengan tebing kapur dan pasir putih lembut	18/02/2026	
+TK-TCK-016	jkl	Nuanu Creative City	50000	Bali	Seni & Pertunjukan	Tempat seni kontemporer dengan café dan workshop kreatif	18/02/2026	
+TK-TCK-017	jkl	Danau Bedugul	50000	Bali	Wisata Alam	Danau pegunungan dengan udara sejuk dan pemandangan hijau menenangkan	18/02/2026	
+TK-TCK-018	jkl	Gunung Batur	25000	Bali	Wisata Alam	Gunung berapi aktif, populer untuk trekking sunrise menakjubkan	18/02/2026	
+TK-TCK-019	jkl	Grand Puncak Sari	25000	Bali	Kuliner	Restoran dengan panorama pegunungan dan hidangan lokal	18/02/2026	
+TK-TCK-020	jkl	Kintamani	25000	Bali	Wisata Alam	Kawasan pegunungan sejuk dengan Danau Batur yang indah	18/02/2026	
+TK-TCK-021	jkl	Lunch All You Can Eat Kintamani	300000	Bali	Kuliner	Pengalaman makan buffet dengan pemandangan alam Kintamani	18/02/2026	
+TK-TCK-022	jkl	Dinner Jimbaran	15000	Bali	Kuliner	Seafood segar di tepi pantai sambil menikmati sunset	18/02/2026	
+TK-TCK-023	jkl	Pantai Jimbaran	35000	Bali	Wisata Alam	Pasir putih dan ombak tenang untuk bersantai atau berjalan kaki	18/02/2026	
+TK-TCK-024	jkl	Pantai Melasti	35000	Bali	Wisata Alam	Pantai indah dengan tebing tinggi dan laut jernih	18/02/2026	
+TK-TCK-025	jkl	Tirta Empul	0	Bali	Budaya & Sejarah	Pura dengan mata air suci, tempat ritual penyucian tradisional	18/02/2026	
+TK-TCK-026	jkl	Waterblow Nusa Dua	50000	Bali	Wisata Alam	Semburan air laut alami dari tebing karang yang menakjubkan	18/02/2026	
+TK-TCK-027	jkl	Pura Tanah Lot	35000	Bali	Budaya & Sejarah	Pura ikonik di batu karang, populer untuk foto matahari terbenam	18/02/2026	
+TK-TCK-028	jkl	Pura Ulun Danu Batur	50000	Bali	Budaya & Sejarah	Pura di tepi Danau Batur dengan pemandangan menenangkan	18/02/2026	
+TK-TCK-029	jkl	Desa Trunyan	0	Bali	Budaya & Sejarah	Desa unik di tepi Danau Batur dengan tradisi berbeda dari desa Bali lainnya	18/02/2026	
+TK-TCK-030	jkl	Lunch View Danau Batur	300000	Bali	Kuliner	Restoran dengan panorama Danau Batur yang memesona	18/02/2026	
+TK-TCK-031	jkl	Coffee Luwak	0	Bali	Kuliner	Kopi luwak khas Bali, terkenal dan nikmat	18/02/2026	
+TK-TCK-032	jkl	Bukit Cinta	0	Bali	Wisata Alam	Bukit hijau romantis dengan pemandangan lembah dan sungai	18/02/2026	
+TK-TCK-033	jkl	Borobudur	120000	Yogyakarta	Budaya & Sejarah	Candi Buddha terbesar di dunia dengan relief epik dan sejarah mendalam	18/02/2026	
+TK-TCK-034	jkl	Lava Tour	450000	Yogyakarta	Wisata Alam	Petualangan jeep melalui aliran lava Gunung Merapi	18/02/2026	
+TK-TCK-035	jkl	Breksi	15000	Yogyakarta	Wisata Alam	Tebing kapur dengan panorama sunset dan spot foto unik	18/02/2026	
+TK-TCK-036	jkl	Kraton	30000	Yogyakarta	Budaya & Sejarah	Istana keraton dengan sejarah kerajaan Yogyakarta	18/02/2026	
+TK-TCK-037	jkl	Malioboro	0	Yogyakarta	Belanja / Souvenir	Jalan ikonik dengan pedagang kaki lima, toko, dan kuliner khas	18/02/2026	
+TK-TCK-038	jkl	Pathok	0	Yogyakarta	Belanja / Souvenir	Pusat kerajinan lokal dan oleh-oleh khas Yogyakarta	18/02/2026	
+TK-TCK-039	jkl	Golden Sunrise Maha Sky Batu Angkruk	50000	Yogyakarta	Wisata Alam	Bukit dengan sunrise memukau dan spot selfie cantik	18/02/2026	
+TK-TCK-040	jkl	Kawah Sikidang	15000	Yogyakarta	Wisata Alam	Kawah aktif dengan uap belerang khas dan pemandangan vulkanik	18/02/2026	
+TK-TCK-041	jkl	Candi Arjuna	15000	Yogyakarta	Budaya & Sejarah	Candi Hindu kuno dengan arsitektur dan relief menarik	18/02/2026	
+TK-TCK-042	jkl	Studio Alam Gamplong	0	Yogyakarta	Edukasi & Hiburan	Lokasi syuting film dan replika desa tradisional Jawa	18/02/2026	
+TK-TCK-043	jkl	Sunset Tebing Breksi	15000	Yogyakarta	Wisata Alam	Tebing kapur dengan panorama matahari terbenam yang dramatis	18/02/2026	
+TK-TCK-044	jkl	Jogja T-shirt	0	Yogyakarta	Belanja / Souvenir	Toko kaos unik khas Yogyakarta	18/02/2026	
+TK-TCK-045	jkl	Candi Prambanan	150000	Yogyakarta	Budaya & Sejarah	Candi Hindu megah dengan arsitektur indah dan cerita Ramayana	18/02/2026	
+TK-TCK-046	jkl	Pantai Parang Tritis	25000	Yogyakarta	Wisata Alam	Pantai berpasir hitam dengan ombak dramatis dan suasana santai	18/02/2026	
+TK-TCK-047	jkl	Jatim Park	110000	Malang	Edukasi & Hiburan	Taman hiburan edukatif untuk keluarga dan anak-anak	18/02/2026	
+TK-TCK-048	jkl	Kusuma Agrowisata	0	Malang	Edukasi & Hiburan	Wisata kebun dan agro dengan aktivitas memetik buah	18/02/2026	
+TK-TCK-049	jkl	Petik Buah	0	Malang	Edukasi & Hiburan	Kegiatan langsung memetik buah segar dari kebun	18/02/2026	
+TK-TCK-050	jkl	Outbound	0	Malang	Adventure / Aktivitas	Area aktivitas fisik dan tantangan outdoor seru	18/02/2026	
+TK-TCK-051	jkl	Oleh-oleh Kayutangan 360	25000	Malang	Belanja / Souvenir	Pusat oleh-oleh khas Malang dengan kerajinan dan makanan	18/02/2026	
+TK-TCK-052	jkl	Keraton Solo	50000	Solo	Budaya & Sejarah	Istana dan pusat budaya Solo, sejarah kaya dan arsitektur klasik	18/02/2026	
+TK-TCK-053	jkl	Kemuning	0	Solo	Wisata Alam	Hutan hijau dan alam tenang untuk relaksasi	18/02/2026	
+TK-TCK-054	jkl	Tjolomadoe	0	Solo	Budaya & Sejarah	Museum gula dengan sejarah dan arsitektur industri kuno	18/02/2026	
+TK-TCK-055	jkl	Klewer	0	Solo	Belanja / Souvenir	Pasar tekstil terbesar di Solo, terkenal untuk batik dan souvenir	18/02/2026	
+TK-TCK-056	jkl	Sheikh Zayed Solo	0	Solo	Budaya & Sejarah	Masjid modern dengan arsitektur unik dan megah	18/02/2026	
+TK-TCK-057	jkl	Kawah Rengganis	0	Bandung	Wisata Alam	Kawah alam di pegunungan dengan pemandangan menawan	18/02/2026	
+TK-TCK-058	jkl	Keranjang Sultan	0	Bandung	Belanja / Souvenir	Toko oleh-oleh khas Bandung lengkap	18/02/2026	
+TK-TCK-059	jkl	Jembatan Gantung Rengganis	0	Bandung	Wisata Alam	Jembatan gantung dengan panorama alam yang memikat	18/02/2026	
+TK-TCK-060	jkl	Glamping Lakeside	0	Bandung	Wisata Alam	Glamping nyaman di tepi danau dengan alam hijau	18/02/2026	
+TK-TCK-061	jkl	Tangkuban Perahu	0	Bandung	Wisata Alam	Gunung berapi dengan kawah unik dan udara sejuk	18/02/2026	
+TK-TCK-062	jkl	Emte Highland	0	Bandung	Wisata Alam	Pegunungan hijau dengan perkebunan teh dan udara segar	18/02/2026	
+TK-TCK-063	jkl	Alun-alun Bandung	0	Bandung	Budaya & Sejarah	Pusat kota dengan landmark ikonik dan suasana ramai	18/02/2026	
+TK-TCK-064	jkl	Pusat Oleh-oleh Karma	0	Bandung	Belanja / Souvenir	Toko oleh-oleh khas Bandung lengkap	18/02/2026	
+TK-TCK-065	jkl	Pusat Oleh-oleh Kunafe	0	Bandung	Belanja / Souvenir	Pusat belanja souvenir dan makanan khas Bandung	18/02/2026	
+TK-TCK-066	jkl	Bukit Merese	0	Lombok	Wisata Alam	Bukit cantik dengan panorama pantai dan sunset eksotis	18/02/2026	
+TK-TCK-067	jkl	Pantai Kuta Mandalika	0	Lombok	Wisata Alam	Pantai putih luas, populer untuk surfing dan bersantai	18/02/2026	
+TK-TCK-068	jkl	Sirkuit Internasional Mandalika	0	Lombok	Adventure / Aktivitas	Sirkuit balap internasional, pusat event motorsport	18/02/2026	
+TK-TCK-069	jkl	Desa Sasak Ende	0	Lombok	Budaya & Sejarah	Desa tradisional Sasak dengan rumah adat dan kehidupan lokal	18/02/2026	
+TK-TCK-070	jkl	Sukarara	0	Lombok	Budaya & Sejarah	Desa pengrajin tenun khas Lombok dengan kerajinan tangan unik	18/02/2026	
+TK-TCK-071	jkl	Gili Air	0	Lombok	Wisata Alam	Pulau kecil dengan pantai cantik dan spot snorkeling	18/02/2026	
+TK-TCK-072	jkl	Gili Meno	0	Lombok	Wisata Alam	Pulau tenang dengan pasir putih bersih dan suasana damai	18/02/2026	
+TK-TCK-073	jkl	Gili Trawangan	0	Lombok	Wisata Alam	Pulau populer dengan aktivitas wisata lengkap dan nightlife santai	18/02/2026	
+TK-TCK-074	jkl	Teluk Nara	0	Lombok	Wisata Alam	Pantai alami dengan perairan jernih dan pemandangan indah	18/02/2026	
+TK-TCK-075	jkl	Lombok Exotic	0	Lombok	Wisata Alam	Wisata alam dan aktivitas outdoor unik di Lombok	18/02/2026	
+TK-TCK-076	jkl	Sasaku	0	Lombok	Budaya & Sejarah	Desa tradisional dengan budaya dan rumah khas Lombok	18/02/2026	
+TK-TCK-077	jkl	Kuliner Ayam Taliwang	0	Lombok	Kuliner	Makanan pedas khas Lombok, ayam taliwang autentik	18/02/2026	
+TK-TCK-078	jkl	Oleh-oleh Mutiara Lombok	0	Lombok	Belanja / Souvenir	Oleh-oleh khas Lombok, termasuk mutiara dan kerajinan lokal	18/02/2026	
+TK-TCK-079	jkl	Sunrise Point	0	Bromo	Wisata Alam	Spot terbaik menikmati matahari terbit di Gunung Bromo	18/02/2026	
+TK-TCK-080	jkl	Widodaren Gunung Batok	0	Bromo	Wisata Alam	Bukit hijau dengan panorama kawah dan pegunungan	18/02/2026	
+TK-TCK-081	jkl	Kawah Bromo	0	Bromo	Wisata Alam	Gunung berapi aktif dengan pemandangan kawah spektakuler	18/02/2026	
+TK-TCK-082	jkl	Pasir Berbisik	0	Bromo	Wisata Alam	Pasir luas dan unik yang menghasilkan suara saat diinjak angin	18/02/2026	
+TK-TCK-083	jkl	Bukit Teletubbies	0	Bromo	Wisata Alam	Bukit hijau bergelombang dengan pemandangan seperti dunia dongeng	18/02/2026	
+TK-DRM-001	vendorticket	Jatim Park I / II	120000	Malang	Edukasi & Hiburan	Taman hiburan keluarga dan kebun binatang dengan aneka wahana seru	31/07/2026	
+TK-DRM-002	vendorticket	Borobudur	50000	Magelang	Budaya & Sejarah	Candi Buddha bersejarah terbesar dengan arsitektur menakjubkan	31/07/2026	
+TK-DRM-003	vendorticket	Pantai Pandawa	30000	Bali	Wisata Alam	Pantai indah berpasir putih dikelilingi tebing kapur ikonik	31/07/2026	
 
 Sheet: Vendors_Other
-ID	Username_Vendor	Name	Service_Type	Price	Unit	Location	Update_Date
-O-BNR-001	vendorjasa	Banner Cetak (JAKALELANA)	Cetak Banner 3x1	100000	Per Trip	Sidoarjo	18/02/2026
-O-GDE-001	vendorjasa	Tour Guid (JAKALELANA)	Tour Guide Lokal (Bali)	700000	Per Hari	Bali	18/02/2026
-O-VID-001	vendorjasa	Videografer (JAKALELANA)	Jasa Videografer/Fotografer	1500000	Per Hari	Surabaya	18/02/2026
+ID	Username_Vendor	Name	Service_Type	Price	Unit	Location	Update_Date	Cashback
+O-BNR-001	vendorjasa	Banner Cetak (JAKALELANA)	Cetak Banner 3x1	100000	Per Trip	Sidoarjo	18/02/2026	
+O-GDE-001	vendorjasa	Tour Guid (JAKALELANA)	Tour Guide Lokal (Bali)	700000	Per Hari	Bali	18/02/2026	
+O-VID-001	vendorjasa	Videografer (JAKALELANA)	Jasa Videografer/Fotografer	1500000	Per Hari	Surabaya	18/02/2026	
 
 Sheet: Packages_Master
 ID	Package_Name	Total_Pax	Transport_ID	Transport_Days	Transport_Cost	Hotel_ID	Hotel_Nights	Hotel_Cost	Meal_ID	Meal_Times	Meal_Cost	Ticket_IDs	Ticket_Cost	Other_IDs	Other_Cost	Total_Real_Cost	Cost_Per_Pax	Selling_Price	Total_Profit	Profit_Per_Pax
@@ -206,3 +206,8 @@ PKG-001	Paket Bali A	60	T-TNR-001	3	13800000	H-HTL-001	1	12600000	R-RMB-001	6	97
 
 Sheet: Logs
 Waktu	Aktor	Aksi	Detail
+03/08/2026 23:32:38	vendorbus2	Update Layanan TRANSPORT	Merubah Jet Bus 3 (T-HRP-002): Harga dari Rp 3.000.000 menjadi Rp 5.000.000
+04/08/2026 0:03:38	vendorbus2	Hapus Layanan TRANSPORT	Menghapus layanan: Jet Bus 3 (T-HRP-002)
+04/08/2026 0:36:07	hotelbandung	Update Layanan HOTEL	Merubah Grand Lembang (Twin) (H-BND-001): Harga dari Rp 700.000 menjadi Rp 600.000
+04/08/2026 0:37:20	hotelbandung	Update Layanan HOTEL	Merubah Grand Lembang (Twin) (H-BND-001): Harga dari Rp 600.000 menjadi Rp 800.000
+04/08/2026 0:38:50	hotelbandung	Update Layanan HOTEL	Merubah Grand Lembang (Twin) (H-BND-001): Harga dari Rp 800.000 menjadi Rp 600.000

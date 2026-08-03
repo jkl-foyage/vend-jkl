@@ -1615,3 +1615,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+// --- Global Click Outside Listener ---
+document.addEventListener('click', function(e) {
+    // 1. Close Notification Dropdown
+    const dropdown = document.getElementById('notifDropdown');
+    if (dropdown && !dropdown.classList.contains('hidden')) {
+        const isClickInside = dropdown.contains(e.target);
+        const isClickOnToggle = e.target.closest('[onclick="toggleNotif()"]');
+        if (!isClickInside && !isClickOnToggle) {
+            dropdown.classList.add('hidden');
+        }
+    }
+    
+    // 2. Close Modals on click outside
+    if (e.target.classList.contains('modal-overlay')) {
+        e.target.classList.add('hidden');
+    }
+});
