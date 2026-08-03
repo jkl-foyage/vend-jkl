@@ -431,24 +431,56 @@ function saveVendorData(category, itemData) {
     }
   }
 
-  const rowData = headers.map(header => itemData[header] || '');
+  const rowData = headers.map((header, index) => {
+    if (itemData[header] !== undefined) return itemData[header];
+    return rowIndexToUpdate > -1 ? data[rowIndexToUpdate - 1][index] : '';
+  });
   
   if (rowIndexToUpdate > -1) {
     const oldRow = data[rowIndexToUpdate - 1];
     let changes = [];
+    
+    // Kamus terjemahan field teknis ke bahasa manusia
+    const labelMap = {
+        'Price_Per_Room': 'Harga',
+        'Price_Per_Pax': 'Harga',
+        'Price_Per_Day': 'Harga',
+        'Pax_Per_Room': 'Kapasitas Kamar',
+        'Capacity': 'Kapasitas',
+        'Facilities': 'Fasilitas',
+        'Location': 'Lokasi',
+        'Description': 'Deskripsi',
+        'Category': 'Kategori',
+        'Service_Type': 'Jenis Layanan',
+        'Price': 'Harga',
+        'Unit': 'Satuan',
+        'Name': 'Nama'
+    };
+
+    const formatVal = (val) => {
+        if (!isNaN(val) && val !== '' && Number(val) > 1000) {
+            // Format angka sederhana dengan titik ribuan
+            return 'Rp ' + Number(val).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+        return `"${val}"`;
+    };
+
     for (let i = 0; i < headers.length; i++) {
         if (headers[i] !== 'Update_Date' && headers[i] !== 'ID' && String(oldRow[i]) !== String(rowData[i])) {
-            changes.push(`${headers[i]} menjadi "${rowData[i]}"`);
+            const label = labelMap[headers[i]] || headers[i];
+            const oldVal = formatVal(oldRow[i]);
+            const newVal = formatVal(rowData[i]);
+            changes.push(`${label} dari ${oldVal} menjadi ${newVal}`);
         }
     }
     
     sheet.getRange(rowIndexToUpdate, 1, 1, headers.length).setValues([rowData]);
     if (changes.length > 0) {
-        appendLog(itemData.Username_Vendor || 'Sistem', `Update Layanan ${category.toUpperCase()}`, `Merubah ${itemData.Name}: ${changes.join(', ')}`);
+        appendLog(itemData.Username_Vendor || 'Sistem', `Update Layanan ${category.toUpperCase()}`, `Merubah ${itemData.Name} (${itemData.ID}): ${changes.join(', ')}`);
     }
   } else {
     sheet.appendRow(rowData);
-    appendLog(itemData.Username_Vendor || 'Sistem', `Tambah Layanan ${category.toUpperCase()}`, `Menambahkan layanan baru: ${itemData.Name}`);
+    appendLog(itemData.Username_Vendor || 'Sistem', `Tambah Layanan ${category.toUpperCase()}`, `Menambahkan layanan baru: ${itemData.Name} (${itemData.ID})`);
   }
   
   // Urutkan data berdasarkan Username_Vendor (Kolom ke-2) lalu ID (Kolom ke-1)
@@ -489,7 +521,7 @@ function deleteVendorData(category, id, username) {
       const itemName = data[i][headers.indexOf('Name')] || id;
       sheet.deleteRow(i + 1);
       
-      appendLog(username, `Hapus Layanan ${category.toUpperCase()}`, `Menghapus layanan: ${itemName}`);
+      appendLog(username, `Hapus Layanan ${category.toUpperCase()}`, `Menghapus layanan: ${itemName} (${id})`);
       return;
     }
   }

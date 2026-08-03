@@ -2,7 +2,7 @@
  * JAKALELANA B2B Package Builder - App Logic (Live API Version)
  */
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbyV9qIrjbn9VbF1Clcr-N3dHmYhLOpuO5vYrCAqGIZ9Dp1y4KGsNrQTlyIY9j6JtSUnVQ/exec'; 
+const API_URL = 'https://script.google.com/macros/s/AKfycbxlfvaNmMErW72FNekV0iVBm7J-tti_jidPnMNggQEqpaaFve_ud2lZsEHtDdRbkB-l1Q/exec';
 
 // --- State Management ---
 const state = {
@@ -38,7 +38,7 @@ function formatDateDisplay(dateStr) {
         const mm = String(d.getMonth() + 1).padStart(2, '0');
         const yyyy = d.getFullYear();
         return `${dd}/${mm}/${yyyy}`;
-    } catch(e) {
+    } catch (e) {
         return str;
     }
 }
@@ -46,7 +46,7 @@ function formatDateDisplay(dateStr) {
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname.toLowerCase();
-    
+
     // Deteksi URL yang lebih fleksibel (mendukung Clean URLs Cloudflare)
     if (path.includes('admin')) {
         if (!checkAuth('admin')) return;
@@ -72,22 +72,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- API Helper ---
 async function apiPost(action, data = {}) {
-    const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action, ...data })
-    });
-    return await response.json();
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action, ...data }),
+            redirect: 'follow', // Pastikan mengikuti redirect dari GAS
+            credentials: 'omit' // Mencegah bug 404 jika user login >1 akun Google
+        });
+
+        // Cek jika response bukan JSON (misal kena blokir atau error HTML)
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            console.error("API tidak mengembalikan JSON. Response:", await response.text());
+            return { success: false, message: "Terjadi kesalahan server (Response bukan JSON). Cek Deployment API Google Apps Script Anda." };
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Fetch API Error:", error);
+        return { success: false, message: "Koneksi ke server gagal. " + error.message };
+    }
 }
 
 async function apiGet(action, params = {}) {
-    const url = new URL(API_URL);
-    url.searchParams.append('action', action);
-    for (const key in params) {
-        url.searchParams.append(key, params[key]);
+    try {
+        const url = new URL(API_URL);
+        url.searchParams.append('action', action);
+        for (const key in params) {
+            url.searchParams.append(key, params[key]);
+        }
+        const response = await fetch(url, {
+            method: 'GET',
+            redirect: 'follow',
+            credentials: 'omit'
+        });
+
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            console.error("API tidak mengembalikan JSON. Response:", await response.text());
+            return { success: false, message: "Terjadi kesalahan server (Response bukan JSON). Cek Deployment API Google Apps Script Anda." };
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Fetch API Error:", error);
+        return { success: false, message: "Koneksi ke server gagal. " + error.message };
     }
-    const response = await fetch(url);
-    return await response.json();
 }
 
 // --- Auth Protection ---
@@ -117,7 +148,7 @@ function initLogin() {
             const userInp = document.getElementById('username').value;
             const passInp = document.getElementById('password').value;
             const errBox = document.getElementById('loginError');
-            
+
             btn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Memuat...';
             btn.disabled = true;
             errBox.classList.add('hidden');
@@ -152,26 +183,26 @@ function initAdmin() {
     document.querySelectorAll('.sidebar-nav .nav-item[data-target]').forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
-            
+
             const target = item.getAttribute('data-target');
             const targetView = document.getElementById('view-' + target);
-            
+
             // FIX: Cegah JS Error jika elemen view/target tidak ada di HTML
-            if (!targetView) return; 
+            if (!targetView) return;
 
             document.querySelectorAll('.sidebar-nav .nav-item').forEach(n => n.classList.remove('active'));
             item.classList.add('active');
-            
+
             document.querySelectorAll('.view-section').forEach(v => {
                 v.style.display = 'none';
                 v.classList.remove('active');
             });
-            
+
             targetView.style.display = 'block';
-            
+
             const titleEl = document.getElementById('pageTitle');
             if (titleEl) titleEl.textContent = item.textContent.trim();
-            
+
             // FIX: Auto close mobile sidebar & hapus overlay gelap
             if (window.innerWidth <= 768) {
                 const sidebar = document.querySelector('.sidebar');
@@ -182,11 +213,15 @@ function initAdmin() {
         });
     });
 
-    loadLogsData();
-
-    // Package Builder Logic
-    loadLiveVendorData();
-    loadPackagesData();
+    // Tunggu data vendor dan paket dimuat agar fallback pencarian ID log berfungsi
+    Promise.all([
+        loadLiveVendorData(),
+        loadPackagesData()
+    ]).then(() => {
+        loadLogsData();
+        // Mulai polling real-time di background setelah inisialisasi selesai
+        startDataPolling();
+    });
 
     document.getElementById('pkgMepo').addEventListener('input', populateBuilderSelects);
     document.getElementById('pkgDest').addEventListener('input', populateBuilderSelects);
@@ -224,86 +259,18 @@ function initAdmin() {
     });
 }
 
-// --- Deep Compare Logic for Notifications ---
+// --- Removed Deep Compare Logic ---
 function formatPrice(val) {
     return 'Rp ' + parseInt(val || 0).toLocaleString('id-ID');
-}
-
-function compareVendors(oldV, newV) {
-    let notifications = [];
-    const categories = Object.keys(newV);
-    
-    categories.forEach(cat => {
-        const oldItems = oldV[cat] || [];
-        const newItems = newV[cat] || [];
-        
-        const oldMap = {};
-        oldItems.forEach(i => oldMap[i.ID] = i);
-        
-        newItems.forEach(nItem => {
-            const oItem = oldMap[nItem.ID];
-            const vendorName = nItem.Vendor_Name || nItem.Username_Vendor || 'Vendor';
-            
-            if (!oItem) {
-                notifications.push(`✨ <b>${vendorName}</b> menambahkan layanan baru: <i>${nItem.Name}</i>`);
-            } else {
-                let changes = [];
-                const oldPrice = parseInt(oItem.Price || oItem.Price_Per_Pax || 0);
-                const newPrice = parseInt(nItem.Price || nItem.Price_Per_Pax || 0);
-                if (oldPrice !== newPrice) {
-                    changes.push(`Harga berubah dari ${formatPrice(oldPrice)} menjadi <b>${formatPrice(newPrice)}</b>`);
-                }
-                
-                if (oItem.Name !== nItem.Name) {
-                    changes.push(`Nama berubah menjadi "<b>${nItem.Name}</b>"`);
-                }
-                
-                if (changes.length > 0) {
-                    notifications.push(`📝 <b>${vendorName}</b> merubah <i>${oItem.Name}</i>: ${changes.join(', ')}`);
-                }
-            }
-        });
-        
-        const newMap = {};
-        newItems.forEach(i => newMap[i.ID] = i);
-        oldItems.forEach(oItem => {
-            if(!newMap[oItem.ID]) {
-                const vendorName = oItem.Vendor_Name || oItem.Username_Vendor || 'Vendor';
-                notifications.push(`🗑️ <b>${vendorName}</b> menghapus layanan: <i>${oItem.Name}</i>`);
-            }
-        });
-    });
-    
-    return notifications;
-}
-
-function comparePackages(oldP, newP) {
-    let notifications = [];
-    const oldMap = {};
-    oldP.forEach(p => oldMap[p.ID] = p);
-    
-    newP.forEach(nP => {
-        const oP = oldMap[nP.ID];
-        if (!oP) {
-            notifications.push(`✨ Paket baru tersimpan: <b>${nP.Package_Name}</b>`);
-        } else {
-            const oldTotal = parseInt(oP.Total_Cost || 0);
-            const newTotal = parseInt(nP.Total_Cost || 0);
-            if(oldTotal !== newTotal) {
-                notifications.push(`📝 Paket <b>${oP.Package_Name}</b> diperbarui menjadi ${formatPrice(newTotal)}`);
-            }
-        }
-    });
-    return notifications;
 }
 
 let lastVendorHash = "";
 async function loadLiveVendorData(isPolling = false) {
     try {
-        const res = await apiGet('getVendors', { 
-            category: 'all', 
-            role: state.user.role, 
-            username: state.user.username 
+        const res = await apiGet('getVendors', {
+            category: 'all',
+            role: state.user.role,
+            username: state.user.username
         });
         if (res.success) {
             const newHash = JSON.stringify(res.data);
@@ -313,52 +280,35 @@ async function loadLiveVendorData(isPolling = false) {
                 populateBuilderSelects();
                 const activeTab = document.querySelector('.tab-btn.active');
                 const cat = activeTab ? activeTab.getAttribute('data-cat') : 'transport';
-                if(typeof renderAdminVendorTable === 'function') renderAdminVendorTable(cat);
-                if(typeof renderVendorTable === 'function') renderVendorTable(cat);
+                if (typeof renderAdminVendorTable === 'function') renderAdminVendorTable(cat);
+                if (typeof renderVendorTable === 'function') renderVendorTable(cat);
             } else if (!isPolling) {
                 state.vendors = res.data;
                 populateBuilderSelects();
-                if(typeof renderAdminVendorTable === 'function') renderAdminVendorTable('transport');
-                if(typeof renderVendorTable === 'function') renderVendorTable('transport');
-                if(document.getElementById('vendorLoading')) document.getElementById('vendorLoading').style.display = 'none';
+                if (typeof renderAdminVendorTable === 'function') renderAdminVendorTable('transport');
+                if (typeof renderVendorTable === 'function') renderVendorTable('transport');
+                if (document.getElementById('vendorLoading')) document.getElementById('vendorLoading').style.display = 'none';
             }
             lastVendorHash = newHash;
         }
     } catch (e) {
         if (!isPolling) {
             console.error("Gagal memuat data", e);
-            if(document.getElementById('vendorLoading')) {
+            if (document.getElementById('vendorLoading')) {
                 document.getElementById('vendorLoading').innerHTML = '<span style="color:var(--danger)">Gagal memuat data dari server</span>';
             }
         }
     }
 }
 
-let lastPackageHash = "";
 async function loadPackagesData(isPolling = false) {
     try {
         const res = await apiGet('getPackages');
         if (res.success) {
-            const newHash = JSON.stringify(res.data || []);
-            if (isPolling && lastPackageHash && newHash !== lastPackageHash) {
-                const oldData = JSON.parse(lastPackageHash);
-                const notifs = comparePackages(oldData, res.data || []);
-                
-                if (notifs.length > 0) {
-                    notifs.forEach(msg => addNotification(msg, true));
-                } else {
-                    addNotification("Data Paket diselaraskan.", true);
-                }
-
-                state.packages = res.data || [];
-                if(typeof renderAdminPackageTable === 'function') renderAdminPackageTable();
-            } else if (!isPolling) {
-                state.packages = res.data || [];
-                if(typeof renderAdminPackageTable === 'function') renderAdminPackageTable();
-            }
-            lastPackageHash = newHash;
+            state.packages = res.data || [];
+            if (typeof renderAdminPackageTable === 'function') renderAdminPackageTable();
         }
-    } catch(e) {
+    } catch (e) {
         if (!isPolling) console.error("Gagal memuat paket", e);
     }
 }
@@ -367,61 +317,164 @@ async function loadPackagesData(isPolling = false) {
 const notifSound = new Audio('assets/notification.mp3');
 let lastLogCount = 0;
 
+function getActionDataFromLog(log) {
+    const aksiLower = log.Aksi.toLowerCase();
+    
+    // 1. Cek jika ini adalah aksi Paket
+    if (aksiLower.includes('paket')) {
+        // Contoh detail baru: "Merubah paket: Paket Hemat Bali (PKG-001)"
+        // Ekstrak ID (contoh: PKG-001)
+        const idMatch = log.Detail.match(/\((PKG-\d+)\)/i);
+        if (idMatch && idMatch[1]) {
+            return { type: 'package', id: idMatch[1].trim() };
+        }
+        
+        // Fallback pencarian nama lama jika log dibuat sebelum fitur log ID ditambahkan
+        let nameMatch = log.Detail.match(/(?:Merubah paket|Menambahkan paket baru|Menghapus paket):?\s+(.+?)(?=:|$)/i);
+        if (nameMatch && nameMatch[1]) {
+            // Karena nama paket lama kadang masih menempel dengan "(PKG-xxx)", bersihkan
+            const name = nameMatch[1].replace(/\(PKG-\d+\)/i, '').trim().toLowerCase();
+            if (state.packages) {
+                const pkgObj = state.packages.find(p => p.Package_Name && p.Package_Name.toLowerCase() === name);
+                if (pkgObj) {
+                    return { type: 'package', id: pkgObj.ID };
+                }
+            }
+        }
+        
+        return { type: 'package', id: null };
+    }
+
+    // 2. Cek jika ini adalah aksi Vendor
+    let cat = '';
+    if (aksiLower.includes('transport')) cat = 'transport';
+    else if (aksiLower.includes('hotel')) cat = 'hotel';
+    else if (aksiLower.includes('resto')) cat = 'resto';
+    else if (aksiLower.includes('ticket')) cat = 'ticket';
+    else if (aksiLower.includes('other') || aksiLower.includes('jasa lainnya')) cat = 'other';
+    
+    if (cat) {
+        // Karena backend sekarang mencatat ID, e.g. "Merubah GGrand Lembang (Twin) (H-HTL-001): ..."
+        // Cari pola ID resmi seperti H-HTL-001, T-TRS-001, dll
+        const idMatch = log.Detail.match(/\(([A-Z]+-[A-Z]+-\d+)\)/i);
+        if (idMatch && idMatch[1]) {
+            return { type: 'vendor', cat: cat, id: idMatch[1].trim() };
+        }
+        
+        // Fallback pencarian nama lama jika log dibuat sebelum fitur log ID ditambahkan
+        // Ini akan menangkap semua teks setelah "Merubah" dan sebelum ":" 
+        let nameMatch = log.Detail.match(/(?:Merubah|Menambahkan layanan baru:|Menghapus layanan:)\s+(.+?)(?=:|$)/i);
+        if (nameMatch && nameMatch[1]) {
+            let name = nameMatch[1].trim().toLowerCase();
+            if (state.vendors && state.vendors[cat]) {
+                const vendorObj = state.vendors[cat].find(v => v.Name && v.Name.toLowerCase() === name);
+                if (vendorObj) {
+                    return { type: 'vendor', cat: cat, id: vendorObj.ID };
+                }
+            }
+        }
+        
+        // Fallback: pindah ke tab kategori terkait meski tidak nemu spesifik barisnya
+        return { type: 'vendor', cat: cat, id: null };
+    }
+    
+    return null;
+}
+
 async function loadLogsData(isPolling = false) {
     if (!state.user || state.user.role !== 'admin') return;
     try {
         const res = await apiGet('getLogs');
         if (res.success) {
             const logs = res.data || [];
-            
+
             // Check for new logs
             if (isPolling && lastLogCount > 0 && logs.length > lastLogCount) {
                 const newCount = logs.length - lastLogCount;
                 const newLogs = logs.slice(0, newCount); // since backend returns reversed (newest first)
-                
+
                 newLogs.forEach(log => {
-                    const actionData = { highlight: true }; // Trigger deep-link action
+                    const actionData = getActionDataFromLog(log);
                     addNotification(`🔔 <b>${log.Aktor}</b> melakukan <i>${log.Aksi}</i>: ${log.Detail}`, true, actionData);
                 });
-                
+
                 // Play sound
                 notifSound.play().catch(e => console.error("Auto-play sound prevented:", e));
+            } else if (!isPolling && logs.length > 0) {
+                // Initial load: show latest 5 logs in dropdown
+                const recentLogs = logs.slice(0, 5);
+                recentLogs.reverse().forEach(log => {
+                    const actionData = getActionDataFromLog(log);
+                    addNotification(`🔔 <b>${log.Aktor}</b> melakukan <i>${log.Aksi}</i>: ${log.Detail}`, true, actionData);
+                });
+                // Sembunyikan badge red dot karena ini hanya histori
+                const badge = document.getElementById('notifBadge');
+                if (badge) badge.style.display = 'none';
             }
-            
+
             lastLogCount = logs.length;
             renderAdminLogsTable(logs);
         }
-    } catch(e) {
+    } catch (e) {
         console.error("Gagal memuat logs", e);
+    }
+}
+
+function formatLogTime(isoString) {
+    try {
+        const d = new Date(isoString);
+        if (isNaN(d)) return isoString;
+        const opts = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
+        return d.toLocaleDateString('id-ID', opts).replace(',', ' •');
+    } catch (e) {
+        return isoString;
     }
 }
 
 function renderAdminLogsTable(logs) {
     const tbody = document.querySelector('#adminLogsTable tbody');
     if (!tbody) return;
-    
+
     if (logs.length === 0) {
         tbody.innerHTML = `<tr><td colspan="4" style="text-align:center">Belum ada aktivitas.</td></tr>`;
         return;
     }
-    
+
     tbody.innerHTML = logs.map(l => `<tr>
-        <td><span style="color:var(--text-muted);font-size:0.8rem">${l.Waktu}</span></td>
+        <td><span style="color:var(--text-muted);font-size:0.8rem">${formatLogTime(l.Waktu)}</span></td>
         <td><strong>${l.Aktor}</strong></td>
         <td><span class="badge" style="background:var(--accent-primary);color:var(--bg-primary);padding:2px 8px;border-radius:12px;font-size:0.75rem;">${l.Aksi}</span></td>
         <td>${l.Detail}</td>
     </tr>`).join('');
 }
 
-setInterval(() => {
-    if (state && state.user) {
-        loadLiveVendorData(true);
-        if (state.user.role === 'admin') {
-            if (typeof loadPackagesData === 'function') loadPackagesData(true);
-            loadLogsData(true);
-        }
+// --- Data Polling Architecture ---
+let isPollingLogs = false;
+async function pollLogsRealtime() {
+    if (state && state.user && state.user.role === 'admin' && !isPollingLogs) {
+        isPollingLogs = true;
+        await loadLogsData(true);
+        isPollingLogs = false;
     }
-}, 30000);
+    setTimeout(pollLogsRealtime, 5000);
+}
+
+function startDataPolling() {
+    // Polling cepat (5 detik) untuk logs (real-time feeling) khusus admin
+    if (state && state.user && state.user.role === 'admin') {
+        setTimeout(pollLogsRealtime, 5000);
+    }
+    
+    // Polling standar (30 detik) untuk data vendor & paket
+    setInterval(() => {
+        if (state && state.user) {
+            loadLiveVendorData(true);
+            if (state.user.role === 'admin') {
+                if (typeof loadPackagesData === 'function') loadPackagesData(true);
+            }
+        }
+    }, 30000);
+}
 
 function renderAdminPackageTable() {
     const tbody = document.querySelector('#adminPackageTable tbody');
@@ -430,8 +483,8 @@ function renderAdminPackageTable() {
         tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada paket yang tersimpan.</td></tr>`;
         return;
     }
-    
-    tbody.innerHTML = state.packages.map(p => `<tr>
+
+    tbody.innerHTML = state.packages.map(p => `<tr id="package-row-${p.ID}">
         <td><span style="font-size:0.8rem; color:var(--text-muted)">${p.ID}</span></td>
         <td><strong>${p.Package_Name}</strong></td>
         <td>${p.Total_Pax}</td>
@@ -444,8 +497,8 @@ function renderAdminPackageTable() {
     </tr>`).join('');
 }
 
-window.deletePackage = async function(id) {
-    if(!confirm('Yakin ingin menghapus paket ini?')) return;
+window.deletePackage = async function (id) {
+    if (!confirm('Yakin ingin menghapus paket ini?')) return;
     try {
         const res = await apiPost('deletePackage', { id: id });
         if (res.success) {
@@ -454,7 +507,7 @@ window.deletePackage = async function(id) {
         } else {
             alert('Gagal: ' + res.message);
         }
-    } catch(e) {
+    } catch (e) {
         alert('Kesalahan jaringan');
     }
 }
@@ -463,12 +516,12 @@ function getRouteCities(mepo, dest) {
     if (!mepo && !dest) return [];
     const m = mepo.toLowerCase().trim();
     const d = dest.toLowerCase().trim();
-    
+
     // Default cities are just mepo and dest
     let cities = [];
-    if(m) cities.push(m);
-    if(d) cities.push(d);
-    
+    if (m) cities.push(m);
+    if (d) cities.push(d);
+
     // Static Routes Dictionary (Jatim - Bali common routes)
     if ((m === 'sidoarjo' || m === 'surabaya') && d === 'bali') {
         cities.push('pasuruan', 'probolinggo', 'situbondo', 'banyuwangi', 'ketapang', 'gilimanuk');
@@ -484,9 +537,9 @@ function getRouteCities(mepo, dest) {
 function filterByRegion(arr, regions) {
     if (!regions || regions.length === 0) return arr;
     return arr.filter(item => {
-        if(!item.Location) return false;
+        if (!item.Location) return false;
         const loc = item.Location.toLowerCase();
-        if(loc === 'semua' || loc === 'all') return true;
+        if (loc === 'semua' || loc === 'all') return true;
         return regions.some(r => loc.includes(r));
     });
 }
@@ -494,20 +547,20 @@ function filterByRegion(arr, regions) {
 function autoFillBaliCosts() {
     const dest = document.getElementById('pkgDest').value.toLowerCase().trim();
     const crossInput = document.getElementById('pkgCrossCost');
-    
+
     if (dest.includes('bali')) {
-        if(crossInput) crossInput.value = 1800000;
+        if (crossInput) crossInput.value = 1800000;
     } else {
-        if(crossInput) crossInput.value = 0;
+        if (crossInput) crossInput.value = 0;
     }
 }
 
 function populateBuilderSelects() {
     const mepo = document.getElementById('pkgMepo').value.trim();
     const dest = document.getElementById('pkgDest').value.trim();
-    
+
     const routeCities = getRouteCities(mepo, dest);
-    
+
     // Transport uses Mepo
     const transportData = filterByRegion(state.vendors.transport || [], mepo ? [mepo.toLowerCase()] : []);
     const selTransport = document.getElementById('pkgTransport');
@@ -526,7 +579,7 @@ function populateBuilderSelects() {
     // Update Ticket Checkboxes
     const ticketData = filterByRegion(state.vendors.ticket || [], dest ? [dest.toLowerCase()] : []);
     const ticketContainer = document.getElementById('pkgTicketCheckboxes');
-    if(ticketContainer) {
+    if (ticketContainer) {
         // Group by Name, keep lowest price
         const grouped = {};
         ticketData.forEach(t => {
@@ -547,7 +600,7 @@ function populateBuilderSelects() {
     // Other Services (Guide, Banner, dll)
     const otherData = filterByRegion(state.vendors.other || [], routeCities);
     const otherContainer = document.getElementById('pkgOtherCheckboxes');
-    if(otherContainer) {
+    if (otherContainer) {
         otherContainer.innerHTML = otherData.map(o => `
             <label class="checkbox-item" data-name="${(o.Name || '').toLowerCase()}">
                 <input type="checkbox" class="other-checkbox" value="${o.ID}" data-price="${o.Price}" data-unit="${o.Unit}">
@@ -557,22 +610,22 @@ function populateBuilderSelects() {
     }
 }
 
-window.filterPkgOther = function() {
+window.filterPkgOther = function () {
     const term = document.getElementById('pkgOtherSearch').value.toLowerCase();
     const items = document.querySelectorAll('#pkgOtherCheckboxes .checkbox-item');
     items.forEach(item => {
         const text = item.getAttribute('data-name') || '';
-        if(text.includes(term)) item.style.display = 'block';
+        if (text.includes(term)) item.style.display = 'block';
         else item.style.display = 'none';
     });
 }
 
-window.filterPkgTicket = function() {
+window.filterPkgTicket = function () {
     const term = document.getElementById('pkgTicketSearch').value.toLowerCase();
     const items = document.querySelectorAll('#pkgTicketCheckboxes .checkbox-item');
     items.forEach(item => {
         const text = item.getAttribute('data-name') || '';
-        if(text.includes(term)) item.style.display = 'block';
+        if (text.includes(term)) item.style.display = 'block';
         else item.style.display = 'none';
     });
 }
@@ -585,15 +638,15 @@ function calculatePackageCost() {
 
     let totalCost = 0;
     let totalCashback = 0;
-    
+
     // Transport
     const tid = document.getElementById('pkgTransport').value;
     const tdays = parseInt(document.getElementById('pkgTransportDays').value) || 0;
-    
+
     let transportCost = 0;
     if (tid) {
         const t = state.vendors.transport.find(x => x.ID === tid);
-        if(t) {
+        if (t) {
             transportCost = parseInt(t.Price_Per_Day) * tdays;
             totalCashback += (parseInt(t.Cashback) || 0) * tdays;
         }
@@ -607,7 +660,7 @@ function calculatePackageCost() {
     let hotelCost = 0;
     if (hid) {
         const h = state.vendors.hotel.find(x => x.ID === hid);
-        if(h) {
+        if (h) {
             const rooms = Math.ceil(pax / hpax);
             hotelCost = rooms * parseInt(h.Price_Per_Room) * hnights;
             totalCashback += (parseInt(h.Cashback) || 0) * rooms * hnights;
@@ -623,17 +676,17 @@ function calculatePackageCost() {
         mtimesInput.value = tdays > 0 ? (tdays * 3) : 3;
     }
     const mtimes = parseInt(mtimesInput.value) || 0;
-    
+
     let mealCost = 0;
     if (mid) {
         const m = state.vendors.resto.find(x => x.ID === mid);
-        if(m) {
+        if (m) {
             mealCost = parseInt(m.Price_Per_Pax) * mtimes * pax;
             totalCashback += (parseInt(m.Cashback) || 0) * pax * mtimes;
         }
     }
     totalCost += mealCost;
-    
+
     // Tickets
     let ticketCost = 0;
     let selectedTicketIds = [];
@@ -646,7 +699,7 @@ function calculatePackageCost() {
         selectedTicketIds.push(ticketId);
     });
     totalCost += ticketCost;
-    
+
     // Other Vendors Cost
     let otherCost = 0;
     let selectedOtherIds = [];
@@ -679,12 +732,12 @@ function calculatePackageCost() {
     const snackCost = parseInt(document.getElementById('pkgSnackCost').value) || 0;
     const tollCost = parseInt(document.getElementById('pkgTollCost').value) || 0;
     const crossCost = parseInt(document.getElementById('pkgCrossCost').value) || 0;
-    
+
     const crossAndToll = tollCost + crossCost;
     totalCost += snackCost + crossAndToll;
 
     const costPerPax = totalCost / pax;
-    
+
     // Dynamic Margin Logic
     let dynamicMargin = defaultMargin;
     let marginLabel = `(Default ${defaultMargin}%)`;
@@ -698,17 +751,17 @@ function calculatePackageCost() {
         dynamicMargin = 12;
         marginLabel = `(Rombongan Besar: 12%)`;
     }
-    
+
     // Show margin label in UI
     const marginLabelEl = document.getElementById('marginLabelDisplay');
     if (marginLabelEl) {
         marginLabelEl.textContent = `💡 Rekomendasi Sistem ${marginLabel}`;
     }
-    
+
     // Recommendation Logic (HPP + dynamic margin, rounded up to nearest 5000)
     const targetPrice = costPerPax * (1 + (dynamicMargin / 100));
     const recommendedPrice = Math.ceil(targetPrice / 5000) * 5000;
-    
+
     let sellingPriceInput = document.getElementById('pkgSellingPrice');
     let sellingPrice = parseInt(sellingPriceInput.value);
     // Auto fill selling price if it's default/too low compared to cost
@@ -731,7 +784,7 @@ function calculatePackageCost() {
     document.getElementById('resRecPrice').textContent = `Rp ${recommendedPrice.toLocaleString('id-ID')}`;
     document.getElementById('resTotalProfit').textContent = `Rp ${totalProfit.toLocaleString('id-ID')}`;
     document.getElementById('resProfitPerPax').textContent = `Rp ${Math.round(profitPerPax).toLocaleString('id-ID')}`;
-    
+
     // Update Details
     document.getElementById('detTransport').textContent = `Rp ${transportCost.toLocaleString('id-ID')}`;
     document.getElementById('detTicket').textContent = `Rp ${ticketCost.toLocaleString('id-ID')}`;
@@ -742,7 +795,7 @@ function calculatePackageCost() {
     document.getElementById('detCross').textContent = `Rp ${crossAndToll.toLocaleString('id-ID')}`;
     document.getElementById('detTotal').textContent = `Rp ${totalCost.toLocaleString('id-ID')}`;
     document.getElementById('detCashback').textContent = `Rp ${totalCashback.toLocaleString('id-ID')}`;
-    
+
     document.getElementById('calculationResult').classList.remove('hidden');
 
     lastCalculatedPackage = {
@@ -775,13 +828,13 @@ async function savePackageData() {
     btn.disabled = true;
     try {
         const res = await apiPost('savePackage', { data: lastCalculatedPackage });
-        if(res.success) {
+        if (res.success) {
             alert("Paket berhasil disimpan ke Google Sheets!");
             loadPackagesData();
         } else {
             alert("Terjadi kesalahan: " + res.message);
         }
-    } catch(e) {
+    } catch (e) {
         alert("Gagal menghubungi server!");
     }
     btn.innerHTML = 'Simpan Paket ke Database Master';
@@ -792,15 +845,18 @@ async function savePackageData() {
 function renderAdminVendorTable(category) {
     const thead = document.querySelector('#adminVendorTable thead');
     const tbody = document.querySelector('#adminVendorTable tbody');
-    
     const items = state.vendors[category] || [];
-    
+
+    const getContactCols = (v) => `
+        <td><strong>${v.Vendor_Name || '-'}</strong><br><small>${v.Vendor_PIC || '-'}</small></td>
+        <td><small>${v.Vendor_Phone || '-'}</small><br><small style="color:var(--text-muted)">${v.Vendor_Address || '-'}</small></td>
+    `;
+
     if (category === 'transport') {
         thead.innerHTML = `<tr><th>Kode Layanan</th><th>Nama Instansi / PIC</th><th>Kontak</th><th>Nama Kendaraan & Kapasitas</th><th>Harga Sewa / Hari</th></tr>`;
         tbody.innerHTML = items.map(v => `<tr id="vendor-row-${v.ID}">
             <td><span style="color:var(--text-muted);font-size:0.8rem">${v.ID}</span></td>
-            <td><strong>${v.Vendor_Name || '-'}</strong><br><small>${v.Vendor_PIC || '-'}</small></td>
-            <td><small>${v.Vendor_Phone || '-'}</small><br><small style="color:var(--text-muted)">${v.Vendor_Address || '-'}</small></td>
+            ${getContactCols(v)}
             <td>${v.Name}<br><small>${v.Capacity} Kursi • ${v.Facilities}</small></td>
             <td>Rp ${parseInt(v.Price_Per_Day).toLocaleString('id-ID')}</td>
         </tr>`).join('');
@@ -808,8 +864,7 @@ function renderAdminVendorTable(category) {
         thead.innerHTML = `<tr><th>Kode Layanan</th><th>Nama Instansi / PIC</th><th>Kontak</th><th>Tipe Kamar & Kapasitas</th><th>Harga / Malam</th></tr>`;
         tbody.innerHTML = items.map(v => `<tr id="vendor-row-${v.ID}">
             <td><span style="color:var(--text-muted);font-size:0.8rem">${v.ID}</span></td>
-            <td><strong>${v.Vendor_Name || '-'}</strong><br><small>${v.Vendor_PIC || '-'}</small></td>
-            <td><small>${v.Vendor_Phone || '-'}</small><br><small style="color:var(--text-muted)">${v.Vendor_Address || '-'}</small></td>
+            ${getContactCols(v)}
             <td>${v.Name}<br><small>${v.Pax_Per_Room} Orang per Kamar • ${v.Facilities}</small></td>
             <td>Rp ${parseInt(v.Price_Per_Room).toLocaleString('id-ID')}</td>
         </tr>`).join('');
@@ -817,8 +872,7 @@ function renderAdminVendorTable(category) {
         thead.innerHTML = `<tr><th>Kode Layanan</th><th>Nama Instansi / PIC</th><th>Kontak</th><th>Nama Paket Menu</th><th>Harga / Orang</th></tr>`;
         tbody.innerHTML = items.map(v => `<tr id="vendor-row-${v.ID}">
             <td><span style="color:var(--text-muted);font-size:0.8rem">${v.ID}</span></td>
-            <td><strong>${v.Vendor_Name || '-'}</strong><br><small>${v.Vendor_PIC || '-'}</small></td>
-            <td><small>${v.Vendor_Phone || '-'}</small><br><small style="color:var(--text-muted)">${v.Vendor_Address || '-'}</small></td>
+            ${getContactCols(v)}
             <td>${v.Name}<br><small>${v.Description || '-'}</small></td>
             <td>Rp ${parseInt(v.Price_Per_Pax).toLocaleString('id-ID')}</td>
         </tr>`).join('');
@@ -834,8 +888,7 @@ function renderAdminVendorTable(category) {
         thead.innerHTML = `<tr><th>Kode Layanan</th><th>Nama Vendor / PIC</th><th>Kontak</th><th>Jenis Jasa</th><th>Harga</th><th>Satuan</th></tr>`;
         tbody.innerHTML = items.map(v => `<tr id="vendor-row-${v.ID}">
             <td><span style="color:var(--text-muted);font-size:0.8rem">${v.ID}</span></td>
-            <td><strong>${v.Vendor_Name || '-'}</strong><br><small>${v.Vendor_PIC || '-'}</small></td>
-            <td><small>${v.Vendor_Phone || '-'}</small><br><small style="color:var(--text-muted)">${v.Vendor_Address || '-'}</small></td>
+            ${getContactCols(v)}
             <td>${v.Name}<br><small>${v.Service_Type || '-'}</small></td>
             <td>Rp ${parseInt(v.Price).toLocaleString('id-ID')}</td>
             <td>${v.Unit || '-'}</td>
@@ -850,7 +903,7 @@ function initVendor() {
 
     const cat = state.user.category;
     const thead = document.querySelector('#vendorTable thead');
-    
+
     const theadHTML = {
         'transport': `<tr><th>Kode</th><th>Nama Kendaraan / Bus</th><th>Kapasitas</th><th>Fasilitas</th><th>Harga Sewa</th><th>Update Terakhir</th><th>Aksi</th></tr>`,
         'hotel': `<tr><th>Kode</th><th>Tipe Kamar</th><th>Kapasitas (Orang)</th><th>Harga (Per Malam)</th><th>Update Terakhir</th><th>Aksi</th></tr>`,
@@ -870,16 +923,16 @@ function initVendor() {
         }).catch(err => console.log('Gagal memuat rekomendasi tiket:', err));
     }
     // Modal logic
-    
+
     const modal = document.getElementById('addItemModal');
     document.getElementById('addNewListingBtn').addEventListener('click', () => {
         document.getElementById('modalTitle').textContent = 'Formulir Layanan Baru';
         document.getElementById('deleteItemModalBtn').style.display = 'none';
         buildVendorForm(cat);
-        
+
         // FIX: Reset isi formulir agar tidak nyangkut sisa data edit sebelumnya
         const formEl = document.getElementById('vendorAddItemForm');
-        if(formEl) formEl.reset();
+        if (formEl) formEl.reset();
 
         const newId = generateId(cat, state.user.name, state.vendors[cat] || []);
         document.getElementById('vId').value = newId;
@@ -895,23 +948,23 @@ function initVendor() {
     document.querySelectorAll('.sidebar-nav .nav-item[data-target]').forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
-            
+
             const target = item.getAttribute('data-target');
             const targetView = document.getElementById('view-' + target);
-            
+
             // FIX: Cegah JS Error jika elemen view/target tidak ada di HTML
             if (!targetView) return;
 
             document.querySelectorAll('.sidebar-nav .nav-item').forEach(n => n.classList.remove('active'));
             item.classList.add('active');
-            
+
             document.querySelectorAll('.view-section').forEach(v => {
                 v.style.display = 'none';
                 v.classList.remove('active');
             });
-            
+
             targetView.style.display = 'block';
-            
+
             const titleEl = document.getElementById('pageTitle');
             if (titleEl) titleEl.textContent = item.textContent.trim();
         });
@@ -956,7 +1009,7 @@ function initProfileView() {
     document.getElementById('profPIC').value = state.user.pic || '';
     document.getElementById('profPhone').value = safePhone === '-' ? '' : safePhone;
     document.getElementById('profAddress').value = state.user.address || '';
-    
+
     // Tampilkan logo jika ada
     if (safeImgUrl) {
         document.getElementById('profileLogoImg').src = safeImgUrl;
@@ -978,7 +1031,7 @@ function initProfileView() {
                 return;
             }
             const reader = new FileReader();
-            reader.onload = function(evt) {
+            reader.onload = function (evt) {
                 selectedLogoBase64 = evt.target.result;
                 selectedLogoMime = file.type;
                 selectedLogoExt = file.name.split('.').pop();
@@ -1017,27 +1070,27 @@ function initProfileView() {
                 alert('Profil berhasil diperbarui!');
                 state.user = res.data;
                 localStorage.setItem('jkl_user', JSON.stringify(res.data));
-                
+
                 // Update sidebar UI & Summary Card
                 const safeNewImgUrl = getDriveImageUrl(state.user.logo);
                 const safeNewPhone = formatPhoneDisplay(state.user.phone);
-                
+
                 document.getElementById('userNameDisplay').textContent = state.user.name;
                 document.getElementById('summaryName').textContent = state.user.name;
                 document.getElementById('summaryPIC').textContent = state.user.pic;
                 document.getElementById('summaryPhone').textContent = safeNewPhone;
                 document.getElementById('summaryAddress').textContent = state.user.address;
-                
+
                 if (safeNewImgUrl) {
                     document.getElementById('summaryLogo').src = safeNewImgUrl;
                     document.getElementById('sidebarVendorLogo').src = safeNewImgUrl;
                     document.getElementById('sidebarVendorLogo').style.display = 'block';
                     document.getElementById('sidebarVendorIcon').style.display = 'none';
                 }
-                
+
                 // Refresh tabel layanan di belakang layar jika ada perubahan ID akibat pergantian nama
                 loadVendorDataLive(state.user.category);
-                
+
             } else {
                 alert('Gagal: ' + res.message);
             }
@@ -1052,20 +1105,20 @@ function initProfileView() {
 
 async function loadVendorDataLive(category) {
     try {
-        const res = await apiGet('getVendors', { 
+        const res = await apiGet('getVendors', {
             category: category,
             role: state.user.role,
-            username: state.user.username 
+            username: state.user.username
         });
         if (res.success) {
             document.getElementById('vendorLoading').style.display = 'none';
             const tbody = document.querySelector('#vendorTable tbody');
             const items = res.data || [];
             state.vendors[category] = items; // Simpan ke state agar editItem bisa mencari datanya
-            
+
             if (items.length === 0) {
-                 tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Anda belum memiliki layanan yang ditambahkan.</td></tr>`;
-                 return;
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Anda belum memiliki layanan yang ditambahkan.</td></tr>`;
+                return;
             }
 
             tbody.innerHTML = items.map(v => {
@@ -1088,21 +1141,21 @@ async function loadVendorDataLive(category) {
                 </tr>`;
             }).join('');
         }
-    } catch(e) {
+    } catch (e) {
         document.getElementById('vendorLoading').innerHTML = '<span style="color:var(--danger)">Gagal memuat data. Silakan coba lagi.</span>';
     }
 }
 
 // Global scope to allow onclick from HTML string
-window.editItem = function(id) {
+window.editItem = function (id) {
     const cat = state.user.category;
     const items = state.vendors[cat] || [];
     const item = items.find(x => x.ID === id);
-    if(!item) return;
+    if (!item) return;
 
     document.getElementById('modalTitle').textContent = 'Edit Layanan';
     document.getElementById('deleteItemModalBtn').style.display = 'block';
-    
+
     // Simpan id untuk proses hapus
     document.getElementById('deleteItemModalBtn').setAttribute('data-id', id);
 
@@ -1113,44 +1166,44 @@ window.editItem = function(id) {
         document.getElementById('vCap').value = item.Capacity || '';
         document.getElementById('vPrice').value = item.Price_Per_Day || '';
         document.getElementById('vFac').value = item.Facilities || '';
-        if(document.getElementById('vLoc')) document.getElementById('vLoc').value = item.Location || '';
+        if (document.getElementById('vLoc')) document.getElementById('vLoc').value = item.Location || '';
     } else if (cat === 'hotel') {
         document.getElementById('vPax').value = item.Pax_Per_Room || '';
         document.getElementById('vPrice').value = item.Price_Per_Room || '';
         document.getElementById('vFac').value = item.Facilities || '';
-        if(document.getElementById('vLoc')) document.getElementById('vLoc').value = item.Location || '';
+        if (document.getElementById('vLoc')) document.getElementById('vLoc').value = item.Location || '';
     } else if (cat === 'resto') {
         document.getElementById('vPrice').value = item.Price_Per_Pax || '';
         document.getElementById('vDesc').value = item.Description || '';
-        if(document.getElementById('vLoc')) document.getElementById('vLoc').value = item.Location || '';
+        if (document.getElementById('vLoc')) document.getElementById('vLoc').value = item.Location || '';
     } else if (cat === 'ticket') {
         document.getElementById('vPrice').value = item.Price_Per_Pax || '';
         document.getElementById('vLoc').value = item.Location || '';
         document.getElementById('vCat').value = item.Category || '';
         document.getElementById('vDesc').value = item.Description || '';
-        
+
         // Picu logika auto-fill & lock untuk tiket eksisting
         setTimeout(() => {
             const vNameInput = document.getElementById('vName');
             if (vNameInput) vNameInput.dispatchEvent(new Event('input'));
         }, 50);
     }
-    
+
     document.getElementById('addItemModal').classList.remove('hidden');
 }
 
 async function deleteItemFromModal() {
     const id = document.getElementById('deleteItemModalBtn').getAttribute('data-id');
-    if(!confirm('Apakah Anda yakin ingin menghapus layanan ini?')) return;
-    
+    if (!confirm('Apakah Anda yakin ingin menghapus layanan ini?')) return;
+
     document.getElementById('deleteItemModalBtn').innerHTML = 'Menghapus...';
     try {
-        const res = await apiPost('deleteVendorData', { 
-            category: state.user.category, 
+        const res = await apiPost('deleteVendorData', {
+            category: state.user.category,
             id: id,
-            username: state.user.username 
+            username: state.user.username
         });
-        if(res.success) {
+        if (res.success) {
             alert('Data berhasil dihapus');
             document.getElementById('addItemModal').classList.add('hidden');
             loadVendorDataLive(state.user.category);
@@ -1165,7 +1218,7 @@ async function deleteItemFromModal() {
 
 function generateId(category, vendorName, items) {
     let catCode = category === 'transport' ? 'T' : category === 'hotel' ? 'H' : category === 'resto' ? 'R' : category === 'ticket' ? 'TK' : 'X';
-    
+
     // Ambil 3 huruf konsonan pertama dari nama vendor
     let consonants = vendorName.replace(/[^a-zA-Z]/g, '').replace(/[aeiouAEIOU]/g, '').toUpperCase();
     let vendorCode = consonants.substring(0, 3);
@@ -1173,9 +1226,9 @@ function generateId(category, vendorName, items) {
         // Jika konsonan kurang dari 3, ambil huruf apa saja
         vendorCode = vendorName.replace(/[^a-zA-Z]/g, '').toUpperCase().substring(0, 3);
     }
-    
+
     let maxSeq = 0;
-    if(items && items.length > 0) {
+    if (items && items.length > 0) {
         items.forEach(item => {
             let parts = item.ID.split('-');
             if (parts.length === 3) {
@@ -1186,7 +1239,7 @@ function generateId(category, vendorName, items) {
             }
         });
     }
-    
+
     let seq = String(maxSeq + 1).padStart(3, '0');
     return `${catCode}-${vendorCode}-${seq}`;
 }
@@ -1246,19 +1299,19 @@ function buildVendorForm(cat) {
         // Setup Auto-fill & Datalist
         const nameList = document.getElementById('ticketNamesList');
         const catList = document.getElementById('ticketCategoriesList');
-        
+
         if (state.ticketMeta && state.ticketMeta.length > 0) {
             const uniqueCats = [...new Set(state.ticketMeta.map(t => t.Category).filter(Boolean))];
             catList.innerHTML = uniqueCats.map(c => `<option value="${c}">`).join('');
-            
+
             const uniqueNames = [...new Set(state.ticketMeta.map(t => t.Name).filter(Boolean))];
             nameList.innerHTML = uniqueNames.map(n => `<option value="${n}">`).join('');
-            
+
             // Auto-fill logika dengan Lock & Harga Referensi
             document.getElementById('vName').addEventListener('input', (e) => {
                 const typedName = e.target.value.toLowerCase().trim();
                 const matches = state.ticketMeta.filter(t => t.Name && t.Name.toLowerCase().trim() === typedName);
-                
+
                 const catInput = document.getElementById('vCat');
                 const descInput = document.getElementById('vDesc');
                 const locInput = document.getElementById('vLoc');
@@ -1288,13 +1341,13 @@ function buildVendorForm(cat) {
                         const [db, mb, yb] = b.Update_Date.split('/');
                         return new Date(ya, ma - 1, da) - new Date(yb, mb - 1, db);
                     });
-                    
+
                     const bestMatch = matches[matches.length - 1]; // Data terupdate
-                    
+
                     catInput.value = bestMatch.Category || '';
                     descInput.value = bestMatch.Description || '';
                     locInput.value = bestMatch.Location || '';
-                    
+
                     // Kunci input agar konsisten
                     catInput.readOnly = true;
                     descInput.readOnly = true;
@@ -1325,24 +1378,32 @@ function buildVendorForm(cat) {
                     catInput.style.background = '';
                     descInput.style.background = '';
                     locInput.style.background = '';
-                    priceHint.style.display = 'none';
                 }
             });
         }
+    } else if (cat === 'other') {
+        form.innerHTML = `
+            <div class="form-group"><label>Kode Unik Layanan</label><input type="text" id="vId" readonly style="background:rgba(0,0,0,0.1);cursor:not-allowed;"></div>
+            <div class="form-group full-width"><label>Nama Layanan Tambahan</label><input type="text" id="vName" required placeholder="Contoh: Banner Cetak, Dokumentasi, Tour Guide"></div>
+            <div class="form-group"><label>Jenis / Kategori Layanan</label><input type="text" id="vCat" required placeholder="Contoh: Cetak Banner 3x1"></div>
+            <div class="form-group"><label>Lokasi (Opsional)</label><input type="text" id="vLoc" placeholder="Contoh: Malang"></div>
+            <div class="form-group"><label>Harga (Rp)</label><input type="number" id="vPrice" required></div>
+            <div class="form-group"><label>Satuan Harga</label><input type="text" id="vUnit" required placeholder="Contoh: Per Pax, Per Hari, Per Grup"></div>
+        `;
     }
 }
 
 async function saveVendorItemLive(cat) {
     const btn = document.getElementById('saveItemBtn');
     const todayStr = getTodayDate();
-    
+
     let data = {
         ID: document.getElementById('vId').value,
         Username_Vendor: state.user.username,
         Name: document.getElementById('vName').value,
         Update_Date: todayStr
     };
-    
+
     if (cat === 'transport') {
         data.Capacity = document.getElementById('vCap').value;
         data.Facilities = document.getElementById('vFac').value;
@@ -1362,20 +1423,25 @@ async function saveVendorItemLive(cat) {
         data.Category = document.getElementById('vCat').value;
         data.Description = document.getElementById('vDesc').value;
         data.Price_Per_Pax = document.getElementById('vPrice').value;
+    } else if (cat === 'other') {
+        data.Service_Type = document.getElementById('vCat').value;
+        data.Location = document.getElementById('vLoc').value;
+        data.Price = document.getElementById('vPrice').value;
+        data.Unit = document.getElementById('vUnit').value;
     }
 
     btn.innerHTML = 'Menyimpan...';
     btn.disabled = true;
     try {
         const res = await apiPost('saveVendorData', { category: cat, data: data });
-        if(res.success) {
+        if (res.success) {
             alert("Data layanan berhasil disimpan!");
             document.getElementById('addItemModal').classList.add('hidden');
             loadVendorDataLive(cat);
         } else {
             alert("Gagal menyimpan: " + res.message);
         }
-    } catch(e) {
+    } catch (e) {
         alert("Gagal terhubung ke server!");
     }
     btn.innerHTML = 'Simpan ke Database';
@@ -1383,22 +1449,22 @@ async function saveVendorItemLive(cat) {
 }
 
 // --- Notification & Settings ---
-window.toggleNotif = function() {
+window.toggleNotif = function () {
     const dropdown = document.getElementById('notifDropdown');
     if (dropdown) dropdown.classList.toggle('hidden');
     const badge = document.getElementById('notifBadge');
     if (badge) badge.style.display = 'none';
 }
 
-window.addNotification = function(msg, isSuccess = true, actionData = null) {
+window.addNotification = function (msg, isSuccess = true, actionData = null) {
     const list = document.getElementById('notifList');
     if (!list) return; // not initialized or not in admin page
-    
+
     // Hilangkan teks 'Belum ada notifikasi' jika ada
     if (list.innerHTML.includes('Belum ada notifikasi')) {
         list.innerHTML = '';
     }
-    
+
     const icon = isSuccess ? '<i class="ph ph-check-circle" style="color:var(--success)"></i>' : '<i class="ph ph-info" style="color:var(--primary)"></i>';
     const div = document.createElement('div');
     div.style.display = 'flex';
@@ -1415,15 +1481,17 @@ window.addNotification = function(msg, isSuccess = true, actionData = null) {
         div.onclick = () => {
             if (actionData.type === 'vendor') {
                 highlightVendor(actionData.cat, actionData.id);
+            } else if (actionData.type === 'package') {
+                highlightPackage(actionData.id);
             }
         };
         div.innerHTML = `${icon} <span style="flex:1;">${msg}</span> <i class="ph ph-arrow-up-right" style="color:var(--accent-primary); align-self:center;"></i>`;
     } else {
         div.innerHTML = `${icon} <span style="flex:1;">${msg}</span>`;
     }
-    
+
     list.insertBefore(div, list.firstChild);
-    
+
     // Munculkan red dot pada icon lonceng
     const badge = document.getElementById('notifBadge');
     if (badge) {
@@ -1431,7 +1499,7 @@ window.addNotification = function(msg, isSuccess = true, actionData = null) {
     }
 }
 
-window.highlightVendor = function(cat, id) {
+window.highlightVendor = function (cat, id) {
     // 1. Pindah ke view Data Mitra
     const navItem = document.querySelector('.sidebar-nav .nav-item[data-target="vendors"]');
     if (navItem) navItem.click();
@@ -1445,36 +1513,73 @@ window.highlightVendor = function(cat, id) {
     if (dropdown) dropdown.classList.add('hidden');
 
     // 4. Gulir dan highlight baris
-    setTimeout(() => {
-        const row = document.getElementById(`vendor-row-${id}`);
-        if(row) {
-            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            row.style.transition = 'background-color 0.5s ease';
-            row.style.backgroundColor = 'rgba(168, 85, 247, 0.4)';
-            setTimeout(() => {
-                row.style.backgroundColor = '';
-            }, 2500);
-        }
-    }, 100);
+    if (id) {
+        setTimeout(() => {
+            const row = document.getElementById(`vendor-row-${id}`);
+            if (row) {
+                row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Warnai baris (terapkan ke td agar tidak tertutup style CSS lain)
+                Array.from(row.children).forEach(td => {
+                    td.style.transition = 'background-color 0.5s ease';
+                    td.style.backgroundColor = 'rgba(6, 182, 212, 0.3)';
+                });
+                setTimeout(() => {
+                    Array.from(row.children).forEach(td => {
+                        td.style.backgroundColor = '';
+                    });
+                }, 2500);
+            }
+        }, 300);
+    }
+}
+
+window.highlightPackage = function(id) {
+    // 1. Pindah ke view Kalkulator Paket
+    const navItem = document.querySelector('.sidebar-nav .nav-item[data-target="packages"]');
+    if (navItem) navItem.click();
+
+    // 2. Tutup dropdown notifikasi
+    const dropdown = document.getElementById('notifDropdown');
+    if (dropdown) dropdown.classList.add('hidden');
+
+    // 3. Gulir dan highlight baris
+    if (id) {
+        setTimeout(() => {
+            const row = document.getElementById(`package-row-${id}`);
+            if (row) {
+                row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Warnai baris (terapkan ke td agar tidak tertutup style CSS lain)
+                Array.from(row.children).forEach(td => {
+                    td.style.transition = 'background-color 0.5s ease';
+                    td.style.backgroundColor = 'rgba(6, 182, 212, 0.3)';
+                });
+                setTimeout(() => {
+                    Array.from(row.children).forEach(td => {
+                        td.style.backgroundColor = '';
+                    });
+                }, 2500);
+            }
+        }, 300);
+    }
 }
 
 let defaultMargin = 20;
 
-window.openSettingsModal = function() {
+window.openSettingsModal = function () {
     const modal = document.getElementById('settingsModal');
     if (modal) modal.classList.remove('hidden');
 }
-window.closeSettingsModal = function() {
+window.closeSettingsModal = function () {
     const modal = document.getElementById('settingsModal');
     if (modal) modal.classList.add('hidden');
 }
-window.saveSettings = function() {
+window.saveSettings = function () {
     const m = parseInt(document.getElementById('settingMargin').value) || 20;
     defaultMargin = m;
     closeSettingsModal();
     addNotification(`Pengaturan disimpan (Margin ${m}%)`, true);
 }
-window.syncData = function() {
+window.syncData = function () {
     addNotification('Memulai sinkronisasi data...', false);
     loadLiveVendorData().then(() => {
         addNotification('Data tersinkronisasi.', true);
@@ -1496,11 +1601,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', toggleSidebar);
     }
-    
+
     if (sidebarOverlay) {
         sidebarOverlay.addEventListener('click', toggleSidebar);
     }
-    
+
     const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
     navItems.forEach(item => {
         item.addEventListener('click', () => {
